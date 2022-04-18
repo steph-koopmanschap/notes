@@ -1,0 +1,456 @@
+#USEFUL LINUX COMMANDS - UPDATED 2022 - APRIL
+#
+#Useful Linux commands with simple commentary for each command targeted for Ubuntu/Debian(2022) server management.
+#Especially handy for beginners to Linux and server management.
+#Use CTRL+F to search for a specific command.
+
+#Display a single line discription of a command called command_name
+whatis command_name
+
+#clear the console of all content. 
+clear
+
+#Show command history
+history
+
+#display absolute path of current working directory
+pwd
+
+#create a new empty file in folder_name called file_name with file_extension. Remove folder_name to create empty file in current directory
+touch folder_name/file_name.file_extension
+touch file_name.file_extension
+
+#counts all the words in a text file
+wc file_name
+
+#Display all the permissions for each file the current user has in current directory 
+ls -l
+
+#create new folder with folder_name in current directory
+mkdir folder_name
+
+#remove folder recursively (completely) 
+sudo rm -rf folder_name 
+
+#copy folder recursively (completely) to target folder
+sudo cp -r folder_name target_folder
+
+#copy folder recursively (completely) to target folder, but ask for overwrite permission
+sudo cp -r -i folder_name target_folder 
+
+#Move all files in folder_name to target_folder (The same as copying the folder and then removing the folder)
+sudo mv /folder_name/* /target_folder/
+
+#Find a folder recursively ending in _cache in the current directory and delete it.
+find . -type d -name '*_cache' -exec rm -r {} +
+
+#Find and delete all files ending in file_extension inside /folder_name
+find /folder_name -type f -name "*.file_extension" -exec rm -f {} \;
+
+#Find and delete file with name "file_name.file_extension inside /folder_name
+find /folder_name -type f -name "tecmint.txt" -exec rm -f {} \;
+
+#remove all empty folders in the /folder_name
+find /folder_name -type d -empty -delete
+
+#Find all files in current directory called file_name.file_extension
+find . -iname file_name.file_extension
+
+#Find all files in /folder_name called file_name.file_extension
+find /folder_name -iname file_name.file_extension
+
+#Find all folders named folder_name_find in the folder folder_name 
+find /folder_name -type d -iname folder_name_find
+
+#Find all files only with file_extension in folder_name
+find /folder_name -type f -name "*.file_extension"
+
+#find all files in the current directory larger than file_size(integer) MB
+find . -type f -size file_sizeM
+
+#find all files in folder_name larger than min_size(integer) MB, but smaller than max_size(integer)
+find /folder_name -size +min_sizeM -size -max_sizeM
+
+#find all files in folder_name larger than file_size(integer) MB, with the extension file_extension
+find /folder_name -type f -name *.file_extension -size +file_sizeM
+
+#Find every file modified in the last number_of_days(integer)
+find / -mtime number_of_days
+
+#Find every file accessed in the last number_of_days(integer)
+find / -atime number_of_days
+
+#Find every file modified or changed in the last number_of_minutes(integer)
+find / -cmin -number_of_minutes
+find / -mmin -number_of_minutes
+
+#Find every file accessed in the last number_of_minutes(integer)
+find / -amin -number_of_minutes
+
+#Find any file in folder_name that is not owned by a valid user or usergroup
+find folder_name -xdev \( -nouser -o -nogroup \) -print
+
+#find the word search_word in the file called file_name with file_extension For example grep hello mytext.txt
+grep search_word file_name.file_extension
+
+#List all files and folders in current directory and output/write the list to file_name.txt
+ls > file_name.txt
+
+#check the line by line differences between file_name_a and file_name_b . Use -y to see visual side by side comparison
+diff -s file_name_a file_name_b
+diff -y file_name_a file_name_b
+
+#check the differences between 2 folders.
+diff -qr folder_name_a/ folder_name_b/
+
+#Completely delete a file with file_name and file_extension so that it is unrecoverable
+shred -u file_name.file_extension
+
+#Ping a domain name or ip address
+ping domaine_name
+
+#Ping a domain name with only number_of_packets (should be an integer)
+ping -c number_of_packets $(domain_ame)
+
+#Find the ip address of a domain name. You can use either 1 of 3 of the commands below
+host domain_name
+dig domain_name
+nslookup domain_name
+
+#Reverse DNS lookup. Find the domain accociated with ip_address
+dig -x ip_address
+
+#See WhoIS LookUp Records of domaine name
+whois domain_name
+
+#Find default Gateway of network. You can use either 1 of 2 of the commands below
+ip route
+route -n
+
+#Check all network services running on the device and their ports
+netstat -lpn
+
+#Scan all open ports on domain_name or ip address. Use -6 for IPv6
+nmap domain_name
+nmap -6 IPv6_Address
+
+#Scan a port range from start to finish (both are integers) on domain_name or ip address
+nmap -p start-finish domain_name
+
+#Detect the operting system of domain_name or ip address
+nmap -O --osscan-guess domain_name
+
+#Check configurations of each Network Interface. Use -a to display both active and inactive interfaces
+ifconfig 
+ifconfig -a
+ip addr show
+
+#Check configurations of interface_name. Common interfaces are: eth0 and br0
+ifconfig interface_name
+
+#Change the inferface_name's MAC into mac_address. For example: AA:BB:CC:DD:EE:FF
+ifconfig interface_name hw ether mac_address
+
+#Add default gateway with ip_address to inferface_name
+route add default gw ip_address inferface_name
+
+#List all rules in iptables
+sudo iptables --list
+
+#Show information about local host/hostname
+hostnamectl
+
+#Change the hostname of the device (for example: mydevice.example.com)
+sudo hostnamectl set-hostname host_name_.domain_name
+
+#Give the webserver complete access to folder_name (Nginx and PHP use the www-data user group)
+sudo chown -R www-data: /var/www/html/folder_name
+
+#Add a new user called user_name(string)
+adduser user_name
+
+#Delete user with user_name
+userdel user_name
+
+#Add a new usergroup called group_name(string)
+groupadd group_name
+
+#add a user called user_name to a group called group_name
+usermod -aG group_name user_name
+
+#Display all user accounts with UID 0 (Only Root should have uid 0)
+awk -F: '($3 == "0") {print}' /etc/passwd
+
+#change permissions of who can use sudo
+sudo visudo
+
+#Check log files. Type journalctl --help for options
+journalctl [options]
+
+#download file in the current directory from the internet with url_name. 
+#For example: wget http://example.com/hello.zip or wget ftp://example.com/hello.zip
+wget url_name
+
+#Download file with file_name and file_extension from FTP server with domain_name with authenthication of user_name and password
+wget --ftp-user=user_name --ftp-password=password ftp://ftp.domain_name/file_name.file_extension
+
+#download an entire website named domain_name. For example: example.com
+wget --recursive --page-requisites --adjust-extension --span-hosts --convert-links --restrict-file-names=windows --domains domain_name --no-parent domain_name
+ 
+#Check which packages can be upgraded 
+sudo apt list --upgradable 
+
+#List all installed packages on the system
+dpkg --list
+
+#Remove/Uninstall package name
+apt-get remove package_Name
+
+#Update the package repository list (check for new updates) then apply the updates (upgrade system)
+apt-get update && apt-get upgrade
+
+#install certificate autorithity and apt https downloader and repository manager
+sudo apt install ca-certificates apt-transport-https software-properties-common  
+ 
+#install PHP 8.1
+sudo apt install php8.1
+
+#install PHP 8.1 Modules
+sudo apt install php8.1-{cli,cmath,common,dom,ftp,sockets,fileinfo,filter,hash,imagick,exif,iconv,libsodium,sodium,openssl,fpm,mysql,mysqli,json,opcache,mbstring,xml,gd,zip,gettext,date,curl}
+
+#install more PHP 8.1 Modules
+sudo apt install php8.1-{gd,zip,mysql,oauth,yaml,fpm,mbstring,memcache}
+
+#install more common PHP 8.1 Modules
+apt-get install libapache2-mod-php8.1 php8.1-fpm libapache2-mod-fcgid php8.1-curl php8.1-dev php8.1-gd php8.1-mbstring php8.1-zip php8.1-mysql php8.1-xml
+
+#List currently active php version
+php -v
+
+#List all the loaded PHP modules
+php --modules
+ 
+#Check Firewall status
+sudo ufw status verbose
+
+#Enable firewall
+sudo ufw enable
+
+#Disable firewall
+sudo ufw disable
+
+#open port 23 for shh on firewall
+sudo ufw allow ssh
+
+#open port 80 for http on firewall
+sudo ufw allow http
+
+#Open port 443 for https on firewall
+sudo ufw allow https
+
+#Open port port_number(integer) on firewall 
+sudo ufw allow port_number
+
+#Open ports from start(integer) to stop(integer) for TCP/UDP on firewall
+sudo ufw allow start:stop/tcp
+sudo ufw allow start:stop/udp
+
+#Block port port_number(integer) for tcp or udp on firewall (This simply ignores incoming traffic)
+sudo ufw deny port_number/tcp
+sudo ufw deny port_number/udp
+
+#Block port port_number(integer) for tcp or udp on firewall (This sends a rejection notice to incoming traffic)
+sudo ufw reject port_number
+
+#List all Firewall rules in a numbered list
+sudo ufw status numbered
+
+#Delete firewall rule at rule_number(integer). (Use command above to see numbered rule list)
+sudo ufw delete rule_number
+
+#Resets the firewall to default factory settings and makes fireawll inactive
+sudo ufw reset
+
+#reload firewall rules
+sudo ufw reload
+
+#List all cronjobs for current user
+crontab -l
+
+#list all cronjobs for user with user_name
+sudo crontab -u user_name -l
+
+#Check the system for rootkits. Use both or either one of the commands
+sudo chkrootkit
+sudo rkhunter --check
+
+#Displays information about all currently logged in user on the system
+w
+
+#Display last user login history
+last
+
+#Display reboot history of device
+last reboot
+
+#Display time and date settings of system
+timedatectl
+
+#Displays information about storage space and how much space is still available
+df -h
+df -m
+
+#Display basic system info
+neofetch
+
+#Display real time active procceses. Use either 1 if the 2 commands. htop is more visual.
+top
+htop
+
+#Terminates and shuts down the process with PID(number) or binary name(string)
+kill PID
+
+#displays the full binary path of program_name
+which program_name
+
+#Display all currently active procceses
+ps -A
+
+#Display the top 10 most memory consuming procceses
+ps -auxf | sort -nr -k 4 | head -10
+
+#Display the top 10 most CPU consuming procceses
+ps -auxf | sort -nr -k 3 | head -10
+
+#Displays real-time network statistics in the console
+sudo iptraf
+
+#display basic system name info (Kernel, hostname, version, machine)
+uname -a
+
+#display complete hardware info of the device. Use --short for summary.  Use last command to print info to a html file
+sudo lshw
+sudo lshw --short
+sudo lshw -html > hardwareinfo.html
+
+#display CPU hardware info
+lscpu
+
+#display storage devices and partitions
+lsblk
+
+#display and list all usb ports and usb controllers and which ones are connected
+lsusb
+
+#list all PCI devices. Use -v for more info on each device
+lspci
+lspci -v
+
+#Disply BIOS info of the system
+sudo dmidecode -t bios
+
+#Display messages that happened at boot
+sudo dmesg -L
+
+#Display only USB related messages that happened at boot
+sudo dmesg | grep -i usb
+
+#Display only SCSI/SATA and disk related messages that happened at boot
+sudo dmesg | grep -i sda
+
+#Display only Memory and RAM related messages that happened at boot
+sudo dmesg | grep -E "mem|memory|nvram"
+
+#Display only critical errors and warning messages that happened at boot
+sudo dmesg -l emerg,alert,crit,err,warn
+
+#Display only services (daemon) related messages that happened at boot
+sudo dmesg -f daemon
+
+#Perform a disk reading speed test on storage space called disk_name for example sda1, sda1, sb1, etc.
+hdparm -tT /dev/disk_name
+
+#Check for badblocks on storage space called disk_name for example sda1, sda1, sb1, etc.
+sudo badblocks -s /dev/disk_name
+
+#Create symlink of congif files from sites available to sites enabled (Debian/Ubuntu systems)
+sudo ln -s /etc/nginx/sites-available/my-config /etc/nginx/sites-enabled/my-config
+ 
+#check if nginx config is valid
+sudo nginx -t
+ 
+#reload config files on nginx server
+sudo systemctl reload nginx
+
+#Activate the rewrite module of Apache (Used in Wordpress Installations)
+sudo a2enmod rewrite
+
+#Enables the Apache website of folder_name
+a2ensite folder_name
+
+#Disables the Apache website of folder_name (replace folder_name with 000-default to disable the default website)
+a2dissite folder_name
+
+#restart apache server
+sudo systemctl restart apache2
+
+Check ALL services on the system
+sudo systemctl status 
+ 
+#check nginx server status
+systemctl status mysql.service
+ 
+#Start mysql server
+sudo systemctl start mysql.service
+ 
+#Check mysql server status
+systemctl status mysql.service
+ 
+#Change default security on fresh mysql installations
+sudo mysql_secure_installation
+ 
+#Run mysql as root user
+sudo mysql
+ 
+#Run mysql as root user / alternative
+mysql -u root -p
+ 
+#Run mysql as username user
+mysql -u username -p
+
+#inside mysql: create a mysql database with "database-name"
+CREATE DATABASE database_name;
+
+#inside mysql: Create a mysql database specifically for WordPress 
+CREATE DATABASE WordPress CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+ 
+#inside mysql: Create new user (replace 'host' with 'localhost' for local login)
+#This login may not work with PHP and phpMyAdmin, use next command instead
+CREATE USER 'username'@'host' IDENTIFIED BY 'password';
+
+#inside mysql: Create new user (replace 'host' with 'localhost' for local login)
+#This login works better with PHP and phpMyAdmin
+CREATE USER 'username'@'host' IDENTIFIED WITH mysql_native_password BY 'password';
+ 
+#inside mysql: Create new user (replace 'host' with 'localhost' for local login)
+#Replace authentication_plugin with auth_socket but this prevents remote login
+CREATE USER 'username'@'host' IDENTIFIED WITH authentication_plugin BY 'password';
+
+#inside mysql: Give full priviledges on database to specified user on localhost
+GRANT ALL PRIVILEGES ON database_name.* TO username@localhost
+
+#inside mysql: Update MySQL Changes
+FLUSH PRIVILEGES;
+
+#inside mysql: Shows all existing MySql Databases 
+SHOW DATABASES;
+
+#inside mysql: Show all existing users and on which host they are.
+SELECT User, Host FROM mysql.user;
+
+
+
+
+
+
+
