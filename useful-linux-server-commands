@@ -16,6 +16,15 @@ history
 #display absolute path of current working directory
 pwd
 
+#Display the PATH variable for current user. (PATH is the path where common programs are executed)
+env | grep PATH
+
+#Shows the absolute Home path for the current user
+echo $HOME
+
+#Open the nautilus file manager as root user
+sudo nautilus
+
 #create a new empty file in folder_name called file_name with file_extension. Remove folder_name to create empty file in current directory
 touch folder_name/file_name.file_extension
 touch file_name.file_extension
@@ -26,8 +35,18 @@ wc file_name
 #Display all the permissions for each file the current user has in current directory 
 ls -l
 
+#Display all files and folders in current directory sorted by when they were last modified
+ls -t
+
+#Find a string in file_name and replace it with replace_string
+sed 's/find_string/replace_string/' file_name.file_extension
+
 #create new folder with folder_name in current directory
 mkdir folder_name
+
+#Rename a folder or file
+mv folder_old_name folder_new_name
+mv file_old_name file_new_name
 
 #remove folder recursively (completely) 
 sudo rm -rf folder_name 
@@ -38,13 +57,16 @@ sudo cp -r folder_name target_folder
 #copy folder recursively (completely) to target folder, but ask for overwrite permission
 sudo cp -r -i folder_name target_folder 
 
+#Move all files in folder_name including subfolders to target_folder
+sudo cp -r /folder_name/* /target_folder/
+
 #Move all files in folder_name to target_folder (The same as copying the folder and then removing the folder)
 sudo mv /folder_name/* /target_folder/
 
 #Find a folder recursively ending in _cache in the current directory and delete it.
 find . -type d -name '*_cache' -exec rm -r {} +
 
-#Find and delete all files ending in file_extension inside /folder_name
+#Find and delete all files ending in file_extension inside /folder_na`me
 find /folder_name -type f -name "*.file_extension" -exec rm -f {} \;
 
 #Find and delete file with name "file_name.file_extension inside /folder_name
@@ -373,11 +395,15 @@ hdparm -tT /dev/disk_name
 #Check for badblocks on storage space called disk_name for example sda1, sda1, sb1, etc.
 sudo badblocks -s /dev/disk_name
 
-#Create symlink of congif files from sites available to sites enabled (Debian/Ubuntu systems)
-sudo ln -s /etc/nginx/sites-available/my-config /etc/nginx/sites-enabled/my-config
+#For Nginx server: create symlink of config files from sites available to sites enabled (Debian/Ubuntu systems)
+sudo ln -s /etc/nginx/sites-available/my-site.com.conf /etc/nginx/sites-enabled/my-site.com.conf 
+ 
+#For Nginx server: remove symlink of config files sites enabled (Debian/Ubuntu systems) 
+sudo rm /etc/nginx/sites-enabled/my-site.com.conf 
  
 #check if nginx config is valid
 sudo nginx -t
+sudo nginx -t -c /etc/nginx/sites-available/my-site.com.conf
  
 #reload config files on nginx server
 sudo systemctl reload nginx
@@ -394,9 +420,27 @@ a2dissite folder_name
 #restart apache server
 sudo systemctl restart apache2
 
-Check ALL services on the system
+#Check ALL services on the system
 sudo systemctl status 
- 
+
+#install the cloudflared tunneling service
+sudo cloudflared service install
+
+#Start cloudlared tunneling service
+sudo systemctl start cloudflared 
+
+#Make cloudflared tunneling service start on boot
+sudo systemctl enable cloudflared
+
+#Check the cloudlared tunnel logs. Use -f for realtime logging.
+sudo journalctl -u cloudflared
+
+#Display info on your cloudflared tunnel
+cloudflared tunnel info mytunnel
+
+#Start a NodeJS server on my-site.com
+sudo node /var/www/my-site.com/public_html/server.js 
+
 #check nginx server status
 systemctl status mysql.service
  
@@ -448,9 +492,5 @@ SHOW DATABASES;
 #inside mysql: Show all existing users and on which host they are.
 SELECT User, Host FROM mysql.user;
 
-
-
-
-
-
-
+#inside mysql: Select all columns from the table table_name
+SELECT * FROM table_name;
