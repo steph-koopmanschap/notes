@@ -1,0 +1,145 @@
+//USEFUL GIT COMMANDS - UPDATED 2022 - JUNE
+//
+//Useful Git commands with simple commentary for each command.
+//Especially handy for beginners to Git.
+//Use CTRL+F to search for a specific command.
+
+/*
+Git workflow for new features:
+
+1. Fetch repository from remote location.
+2. Merge changes from the remote.
+3. Create a new branch.
+4. Make changes .
+5. Commit to new branch.
+6. Fetch and merge from the remote again (in case new commits were made while you were working) .
+7. Push your branch to the remove for review.
+6. Merge new branch with main branch.
+7. Delete new branch.
+
+Common .gitignore files:
+
+node_modules and other dependencies
+API files with secret keys
+Log files
+System files such as thumbs.db or .DS_Store
+Binary files
+Production builds
+*/
+
+//Create new local git repository in current directory
+git init
+//New directory projectName in current directory and create git repository in that directory
+git init projectName
+
+//Sign all commits in all repositories with userName
+git config --global user.name "userName"
+
+//Sign all commits in all repositories with e-mail myMail
+git config --global user.email "myMail@host.com"
+
+//Discard changes in filename in the working directory
+git checkout HEAD fileName
+
+//Remove file from staging area
+git reset HEAD -- fileName
+
+//Copy a git repository and name the local repo as clone_name (clone_name will be the directory name)
+git clone /path/to/repository clone_name
+
+//Copy a remote git repository and name the local repo as clone_name (clone_name will be the directory name)
+git clone username@host:/path/to/repository clone_name
+
+//Add files to the staging area
+git add fileName1 fileName2
+
+//Add every file to the stating area
+git add .
+
+//Commit changes to the working directory
+git commit -m "Commit message"
+
+//Commit changes without  creating a new commit and keeping the original commit message
+git commit --amend --no-edit
+
+//Add file to the staging area and then immediately create a new commit
+git add fileName.fileExtension && git commit -m "Commit message"
+
+//Set git user info and configurations
+git config
+
+//Display the list of changed files
+git status
+
+//Display repository commit history
+git log
+
+//Display repository commit history, but only the ones that have keyword
+git log -S "keyword" 
+
+//Display repository commit history with grpahical/visual overview
+git log --oneline --graph - --graph
+git log --graph --decorate --oneline --all
+
+//Mark commitID with a tag for release points
+git tag commitID
+
+//List all current differences
+git diff
+
+//List differences between fileName and base file
+git diff --base fileName
+
+//List differences between sourceBranch and targetbranch
+git diff sourceBranch targetBranch
+
+//Create a new branch and switch to that branch
+command git checkout -b branchName
+
+//Switch to a another branch that has branchName
+git checkout branchName
+
+//See all branches in the repository. The asterisk '*' shows what branch you are on.
+git branch
+
+//create a new branch named branchName
+git branch branchName
+
+//Create a new branch called branchName and then immediately switch to that branch.
+git branch branchName && git checkout branchName
+
+//Delete a branch
+git branch –d branchName
+
+//Delete a branch that has never been merged 
+git branch –D branchName
+
+//Merge branchName into the current branch
+git merge branchName
+
+//Switch to the main branch and then immediately merge branchName into the main branch
+git checkout main && git merge branchName
+
+//Send local commits to the master branch of the remote repository
+git push origin <master>
+
+//View all remote repositories
+git remote –v
+
+//Connect local repository to a remote server called hostName
+git remote add origin hostName
+
+//Delete a connection to a specified remote repository:
+git remote rm repositoryName
+
+//Fetch new commits/changes from remote respository and save them in a seperate remote branch
+//git fetch does takes the commits from the origin/main remote branch and stores it in the local/remote branch
+//git fetch does not save the commits to the local/main branch
+//Use git merge origin/master to merge the commits from the fetch into the local main branch
+git fetch
+
+//Add the branchName to the remote repository. Note that this does not merge the branch with the main remote branch
+git push origin branchName
+
+//Move to branch with Branchname, then add files to staging area, then commit the files to the branch, then push the branch to the remote repository
+git checkout branchName && git add fileName && git commit -m "Commit message" && git push origin branchName 
