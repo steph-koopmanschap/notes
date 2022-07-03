@@ -1,0 +1,68 @@
+#UBUNTU SERVER DIRECTORY/FILE STRUCTURE - UPDATED 2022 - APRIL
+#
+#A list of useful directories and files for managing Linux/Ubuntu server
+#Especially handy for beginners to Linux and server management
+
+#Hostname file
+/etc/hostname
+
+#Hosts file - For DNS Lookup
+/etc/hosts
+
+#Internal DNS Resolver config file
+/etc/resolv.conf
+
+#SSH Config files
+/etc/ssh/sshd_config
+
+#Website storage files.
+/var/www/html/
+
+#Nginx main config file (doesn't need to be edited usually).
+/etc/nginx/nginx.conf
+
+#Add per site config files.
+/etc/nginx/sites-available/
+
+#Create a symlink here from sites-available (nginx server)
+/etc/nginx/sites-enabled/
+
+#Site Nginx config files (CentOS/Fedora/RedHat systems)
+/etc/nginx/conf.d/
+
+#Apache 2 Config files
+/etc/apache2
+
+#Linux kernel and networking settings file
+/etc/sysctl.conf
+
+#cloudflared tunnel service config file
+/etc/cloudflared/config.yml
+
+#System wide log files
+/var/log/
+
+#Nginx log files
+/var/log/nginx
+/var/log/nginx/error.log
+/var/log/nginx/access.log
+
+#Firewall log files
+/var/log/ufw.log
+
+#APT Package manager sources.
+/etc/apt/sources.list.d
+
+#Sudo permissions
+/etc/sudoers.d/
+/etc/sudoers
+
+#Cron jobs
+etc/cron.d
+/etc/cron.daily
+/etc/cron.hourly
+/etc/cron.monthly
+/etc/cron.weekly
+
+
+
