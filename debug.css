@@ -1,0 +1,18 @@
+/* Use these CSS Style for visually debugging CSS */
+
+* {
+    box-sizing: border-box;
+    outline: 2px solid red !important;
+    background: rgb(0 100 0 /  0.05) !important;
+}
+
+/* Alternate the outline color of every other element */
+*:nth-child(2n) {
+    outline: 2px solid limegreen !important;
+}
+
+/* Use this class for selected debugging */
+.debug-css * { 
+    outline: 2px solid hotpink !important; 
+    background: rgb(0 100 0 /  0.05) !important;
+}
