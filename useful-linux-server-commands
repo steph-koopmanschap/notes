@@ -1,4 +1,4 @@
-#USEFUL LINUX COMMANDS - UPDATED 2022 - APRIL
+#USEFUL LINUX COMMANDS - UPDATED 2022 - JUNE
 #
 #Useful Linux commands with simple commentary for each command targeted for Ubuntu/Debian(2022) server management.
 #Especially handy for beginners to Linux and server management.
@@ -37,6 +37,9 @@ ls -l
 
 #Display all files and folders in current directory sorted by when they were last modified
 ls -t
+
+#Display all + hidden files and folders in current directory
+ls -a
 
 #Find a string in file_name and replace it with replace_string
 sed 's/find_string/replace_string/' file_name.file_extension
@@ -251,7 +254,42 @@ php -v
 
 #List all the loaded PHP modules
 php --modules
- 
+
+#Check if existing SSH keys are present.
+ls -al ~/.ssh
+
+#Generate a new SSH Key. Use the 2nd command if ed25519 is not supported.
+ssh-keygen -t ed25519 -C "youremail@example.com"
+ssh-keygen -t rsa -b 4096 -C "youremail@example.com"
+
+#Start the SSH-Agent in the background
+eval "$(ssh-agent -s)"
+
+#Add your Private SSH key to the SSH agent. Replace id_ed25519 with your private key filename
+ssh-add ~/.ssh/id_ed25519
+
+#Show your public SSH key. Replace id_ed25519 with your public key filename
+cat ~/.ssh/id_ed25519.pub
+
+#Enable the SSH Service
+sudo systemctl enable ssh
+
+#Check status of SSH Service
+sudo systemctl start ssh
+
+#Adds an sftp usergroup for managing a SFTP server 
+sudo addgroup sftp
+
+#Adds a user called "user_name" to the group sftp
+sudo usermod -a -G sftp user_name
+
+#Creates a directory "Documents" in /var/sftp for managing SFTP server
+#Then adds the appropriate permissions to the folder
+sudo mkdir -p /var/sftp/Documents
+sudo chown root:root /var/sftp
+sudo chmod 755 /var/sftp
+sudo chown user_name:user_name /var/sftp/Document
+
 #Check Firewall status
 sudo ufw status verbose
 
@@ -318,12 +356,21 @@ last reboot
 #Display time and date settings of system
 timedatectl
 
+//Display info about the swap file
+sudo swapon --summary
+
 #Displays information about storage space and how much space is still available
 df -h
 df -m
 
 #Display basic system info
 neofetch
+
+#Display temperature of different sensors. Temperature is written in Celcius in 5 digit format. 45000 = 45 Degrees celcius
+cat /sys/class/thermal/thermal_zone*/temp
+
+#Display temperature of different sensors. In a more human readable format 
+paste <(cat /sys/class/thermal/thermal_zone*/type) <(cat /sys/class/thermal/thermal_zone*/temp) | column -s $'\t' -t | sed 's/\(.\)..$/.\1°C/'
 
 #Display real time active procceses. Use either 1 if the 2 commands. htop is more visual.
 top
@@ -494,3 +541,10 @@ SELECT User, Host FROM mysql.user;
 
 #inside mysql: Select all columns from the table table_name
 SELECT * FROM table_name;
+
+
+
+
+
+
+

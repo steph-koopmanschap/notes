@@ -1,4 +1,4 @@
-//USEFUL GIT COMMANDS - UPDATED 2022 - JUNE
+//USEFUL GIT COMMANDS - UPDATED 2022 - JULY
 //
 //Useful Git commands with simple commentary for each command.
 //Especially handy for beginners to Git.
@@ -10,12 +10,17 @@ Git workflow for new features:
 1. Fetch repository from remote location.
 2. Merge changes from the remote.
 3. Create a new branch.
-4. Make changes .
-5. Commit to new branch.
-6. Fetch and merge from the remote again (in case new commits were made while you were working) .
-7. Push your branch to the remove for review.
-6. Merge new branch with main branch.
-7. Delete new branch.
+4. Make changes.
+6. Test the changes and make sure they work.
+7. Commit to new branch.
+8. Fetch and merge from the remote repo again (in case new commits were made while you were working) .
+9. Push your branch to the remote repo for review.
+10. Merge new branch with main branch.
+11. Delete new branch.
+
+Commit best practices:
+
+* Confine your commits per feature or per bug fix.
 
 Common .gitignore files:
 
@@ -29,6 +34,13 @@ Production builds
 
 //Create new local git repository in current directory
 git init
+
+//Add your git username to the project/rep
+git config user.email "myemail@example.com" 
+
+//Add your git name to the project/repo
+git config user.name "myname"
+
 //New directory projectName in current directory and create git repository in that directory
 git init projectName
 
@@ -55,6 +67,12 @@ git add fileName1 fileName2
 
 //Add every file to the stating area
 git add .
+
+//Remove fileName from the staging area
+git restore --staged fileName
+
+//Remove every file from the staging area
+git restore --staged .
 
 //Commit changes to the working directory
 git commit -m "Commit message"
@@ -94,10 +112,14 @@ git diff --base fileName
 git diff sourceBranch targetBranch
 
 //Create a new branch and switch to that branch
-command git checkout -b branchName
+git checkout -b branchName
 
 //Switch to a another branch that has branchName
 git checkout branchName
+
+//Force switch to another branch that has branchName 
+//Using force checkout may discard any unsaved/uncommitted changes you made in the branch
+git checkout -f branchName
 
 //See all branches in the repository. The asterisk '*' shows what branch you are on.
 git branch
@@ -111,7 +133,7 @@ git branch branchName && git checkout branchName
 //Delete a branch
 git branch –d branchName
 
-//Delete a branch that has never been merged 
+//Delete a branch that has never been merged or not been fully merged
 git branch –D branchName
 
 //Merge branchName into the current branch
@@ -121,7 +143,7 @@ git merge branchName
 git checkout main && git merge branchName
 
 //Send local commits to the master branch of the remote repository
-git push origin <master>
+git push origin main
 
 //View all remote repositories
 git remote –v
@@ -143,3 +165,18 @@ git push origin branchName
 
 //Move to branch with Branchname, then add files to staging area, then commit the files to the branch, then push the branch to the remote repository
 git checkout branchName && git add fileName && git commit -m "Commit message" && git push origin branchName 
+
+//Login with the Github CLI tool
+gh auth login
+
+//Create a new issue on the Github remote repo
+gh issue create --title "my_title" --body "my_description"
+
+//Check the status of your Github ussues (you need be inside your local git repo directory)
+gh issue status
+
+//Create a Github pull request
+gh pr create
+
+//Merge the Github pull request
+gh pr merge
