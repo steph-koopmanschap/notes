@@ -50,6 +50,14 @@
 #Firewall log files
 /var/log/ufw.log
 
+#PostGreSQL storage files
+/var/lib/postgresql
+/var/lib/postgresql/14/main
+
+#PostGreSQL Config files
+/etc/postgresql/
+/etc/postgresql/14/main
+
 #APT Package manager sources.
 /etc/apt/sources.list.d
 

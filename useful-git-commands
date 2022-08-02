@@ -56,6 +56,9 @@ git checkout HEAD fileName
 //Remove file from staging area
 git reset HEAD -- fileName
 
+//Remove and delete the last commit on the current branch
+git reset --hard HEAD~1
+
 //Copy a git repository and name the local repo as clone_name (clone_name will be the directory name)
 git clone /path/to/repository clone_name
 
@@ -67,6 +70,9 @@ git add fileName1 fileName2
 
 //Add every file to the stating area
 git add .
+
+//Add every file in the sub-directory
+git add folder/. 
 
 //Remove fileName from the staging area
 git restore --staged fileName
@@ -124,6 +130,9 @@ git checkout -f branchName
 //See all branches in the repository. The asterisk '*' shows what branch you are on.
 git branch
 
+//Show every available branch from both the local and the remote repo.
+git branch -a
+
 //create a new branch named branchName
 git branch branchName
 
@@ -151,14 +160,20 @@ git remote –v
 //Connect local repository to a remote server called hostName
 git remote add origin hostName
 
+//Check lines of code in a git repo
+git ls-files | xargs wc -l
+
 //Delete a connection to a specified remote repository:
 git remote rm repositoryName
 
-//Fetch new commits/changes from remote respository and save them in a seperate remote branch
-//git fetch does takes the commits from the origin/main remote branch and stores it in the local/remote branch
-//git fetch does not save the commits to the local/main branch
+//Fetch new commits/changes from remote respository
+//Git fetch does not merge any changes to the local repo.
 //Use git merge origin/master to merge the commits from the fetch into the local main branch
 git fetch
+
+//This combines git fetch and git merge origin/master.
+//This merges all changes from the main remote branch to the local repo
+git pull
 
 //Add the branchName to the remote repository. Note that this does not merge the branch with the main remote branch
 git push origin branchName

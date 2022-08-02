@@ -1,0 +1,91 @@
+#psql: Show all databases
+\l
+
+#psql: Show all tablespaces
+\db
+
+#psql: Connect to a database
+\c database_name;
+
+#psql: Quit psql
+\q
+
+#psql: Clear the console screen. You can also use CTRL+L
+\! clear;
+
+#psql: Change the password of the default 'postgres' user.
+ALTER USER postgres PASSWORD 'MY_PASSWORD';
+
+#psql: Check the key usage of a table called 'your_table_name'
+SELECT
+  constraint_name, table_name, column_name
+FROM
+  information_schema.key_column_usage
+WHERE
+  table_name = 'your_table_name';
+
+#sql: create a database with "database-name"
+CREATE DATABASE database_name;
+
+#psql: create a database with some configurations
+CREATE DATABASE database_name ENCODING='UTF8' LOCALE='C' TEMPLATE='template0';
+
+#sql: select all columns from table_name
+SELECT * FROM table_name;
+
+#sql: select column1 and column 2 from table_name with an alias 
+SELECT column1, column2 FROM table_name AS 'alias_name';
+
+#sql: select column from table_name, but ignore duplicates
+SELECT DISTINCT column FROM table_name;
+
+#sql: select all columns from table_name, but only the rows which satisfy the condition.
+#	conditions: =, <>, >, <, >=, <=
+SELECT * FROM table_name WHERE column > some_number;
+
+#sql: select all columns from table_name, but only the rows which satisfy the condition. Only works on strings. % is a wildcard for any character.
+SELECT * FROM table_name WHERE column LIKE '%some_text%';
+
+#sql: select all columns from table_name, but only the rows where column does not contain a null / empty value.
+SELECT * FROM table_name WHERE column IS NOT NULL;
+
+#sql: select all columns from table_name, but only the rows where column contains a null / empty value.
+SELECT * FROM table_name WHERE column IS NULL;
+
+#sql: select all columns from table_name, but order the rows by alphabetical order the column_name. 
+#	Note: ORDER BY always goes after WHERE (if WHERE is present).
+SELECT * FROM table_name ORDER BY column_name;
+
+#sql: select all columns from table_name, but only limit the results to 10.
+SELECT * FROM table_name LIMIT 10;
+
+
+#sql: Create a database specifically for WordPress 
+CREATE DATABASE WordPress CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+ 
+#sql: Create new user (replace 'host' with 'localhost' for local login)
+#This login may not work with PHP and phpMyAdmin, use next command instead
+CREATE USER 'username'@'host' IDENTIFIED BY 'password';
+
+#sql: Create new user (replace 'host' with 'localhost' for local login)
+#This login works better with PHP and phpMyAdmin
+CREATE USER 'username'@'host' IDENTIFIED WITH mysql_native_password BY 'password';
+ 
+#sql: Create new user (replace 'host' with 'localhost' for local login)
+#Replace authentication_plugin with auth_socket but this prevents remote login
+CREATE USER 'username'@'host' IDENTIFIED WITH authentication_plugin BY 'password';
+
+#sql: Give full priviledges on database to specified user on localhost
+GRANT ALL PRIVILEGES ON database_name.* TO username@localhost
+
+#sql: Update MySQL Changes
+FLUSH PRIVILEGES;
+
+sql: Show all existing users and on which host they are.
+SELECT User, Host FROM mysql.user;
+
+sql: Select all columns from the table table_name
+SELECT * FROM table_name;
+
+#mysql: Shows all existing MySql Databases 
+SHOW DATABASES;

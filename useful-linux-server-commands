@@ -488,7 +488,24 @@ cloudflared tunnel info mytunnel
 #Start a NodeJS server on my-site.com
 sudo node /var/www/my-site.com/public_html/server.js 
 
-#check nginx server status
+#Check PostGreSQL server status
+systemctl status postgresql
+
+#login to PostGreSQL server with default user (postgres)
+sudo -u postgres psql
+
+#Login as the postgres user on the system
+sudo -u postgres -i
+
+#Show the current storage directory of PostGreSQL. Both the first and second command do the same thing.
+sudo -u postgres psql -c "show data_directory;"
+ps aux | grep postgres | grep -- -D
+
+
+#Use pg_dump to export database data
+sudo -u postgres pg_dump
+
+#check mysql server status
 systemctl status mysql.service
  
 #Start mysql server
@@ -509,38 +526,7 @@ mysql -u root -p
 #Run mysql as username user
 mysql -u username -p
 
-#inside mysql: create a mysql database with "database-name"
-CREATE DATABASE database_name;
 
-#inside mysql: Create a mysql database specifically for WordPress 
-CREATE DATABASE WordPress CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
- 
-#inside mysql: Create new user (replace 'host' with 'localhost' for local login)
-#This login may not work with PHP and phpMyAdmin, use next command instead
-CREATE USER 'username'@'host' IDENTIFIED BY 'password';
-
-#inside mysql: Create new user (replace 'host' with 'localhost' for local login)
-#This login works better with PHP and phpMyAdmin
-CREATE USER 'username'@'host' IDENTIFIED WITH mysql_native_password BY 'password';
- 
-#inside mysql: Create new user (replace 'host' with 'localhost' for local login)
-#Replace authentication_plugin with auth_socket but this prevents remote login
-CREATE USER 'username'@'host' IDENTIFIED WITH authentication_plugin BY 'password';
-
-#inside mysql: Give full priviledges on database to specified user on localhost
-GRANT ALL PRIVILEGES ON database_name.* TO username@localhost
-
-#inside mysql: Update MySQL Changes
-FLUSH PRIVILEGES;
-
-#inside mysql: Shows all existing MySql Databases 
-SHOW DATABASES;
-
-#inside mysql: Show all existing users and on which host they are.
-SELECT User, Host FROM mysql.user;
-
-#inside mysql: Select all columns from the table table_name
-SELECT * FROM table_name;
 
 
 
