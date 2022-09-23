@@ -1,5 +1,28 @@
+#A list of useful commands in SQL mainly focused on PostGreSQL
+
+#In the file pg_hba.conf 
+#This file controls: which hosts are allowed to connect, how clients
+# are authenticated, which PostgreSQL user names they can use, which
+# databases they can access.
+#The config follows this basic format  
+connection_type  db  user  address  auth_method  [auth_options]
+#possible connection_types
+# local             is a Unix-domain socket    
+# host              is a TCP/IP socket (encrypted or not)
+# hostssl           is a TCP/IP socket that is SSL-encrypted
+# hostnossl         is a TCP/IP socket that is not SSL-encrypted
+# hostgssenc        is a TCP/IP socket that is GSSAPI-encrypted
+# hostnogssenc      is a TCP/IP socket that is not GSSAPI-encrypted
+#----
+#To deny all connections use the rule:
+host all all all reject
+
+#psql: Reload/Refresh the postgresql config file. (in case changes have been made to it)
+SELECT pg_reload_conf ()
+
 #psql: Show all databases
 \l
+\list
 
 #psql: Show all tablespaces
 \db
@@ -30,6 +53,19 @@ CREATE DATABASE database_name;
 #psql: create a database with some configurations
 CREATE DATABASE database_name ENCODING='UTF8' LOCALE='C' TEMPLATE='template0';
 
+#sql: Create a new table in the database called table_name with 2 columns callled column_one and column_two
+CREATE TABLE table_name (
+  column_one data_type, 
+  column_two data_type,
+);
+
+#sql: Insert values into a table. Each value corresponds to a column
+INSERT INTO table_name (column_name1, column_name2)
+VALUES (
+  value_one,
+  value_two
+);
+
 #sql: select all columns from table_name
 SELECT * FROM table_name;
 
@@ -59,6 +95,160 @@ SELECT * FROM table_name ORDER BY column_name;
 #sql: select all columns from table_name, but only limit the results to 10.
 SELECT * FROM table_name LIMIT 10;
 
+#sql: Remove column_name from table_name
+ALTER TABLE table_name 
+DROP COLUMN column_name;
+
+#sql: Join 3 tables together with aliases
+SELECT table_one.column_one AS alias_one, table_two.column_two AS alias_two, table_three.column_three AS alias_three
+FROM table_one
+INNER JOIN table_two
+ON table_one.primary_key = table_two.foreign_key
+INNER JOIN table_three
+ON table_two.primary_key = table_three.foreign_key;
+
+#sql: Update a table (change column value of existing row)
+#WHERE <column_name_clause> = <value>; is optional if you want to update every single row.
+UPDATE <table_name>
+SET <column_name> = <value>
+WHERE <column_name_clause> = <value>;
+
+#psql: Delete data from a column wich satisfies the conditional.
+DELETE FROM <column_name> 
+WHERE <conditional>;
+
+#psql: Create a trigger on a database. This trigger will execute a function everytime before <EVENT> is done on <table_name>
+#You can change <EVENT> by UPDATE, INSERT, DELETE and TRUNCATE (no trigger can be set on a SELECT statement.)
+#Replace "EXECUTE FUNCTION" by "EXECUTE PROCEDURE" for older versions of PostGreSQL
+#You can replace BEFORE by AFTER to perform the trigger after the <EVENT> is done.
+#You replace FOR EACH ROW by FOR EACH STATEMENT
+CREATE TRIGGER <trigger_name>
+BEFORE <EVENT> ON <table_name>
+FOR EACH ROW
+EXECUTE FUNCTION <function_namme>();
+
+#psql: Show all  the triggers that currently exist in the database
+SELECT * FROM information_schema.triggers;
+
+#psql: Remove a trigger from a table
+DROP TRIGGER <trigger_name> ON <table_name>;
+
+#psql: Replace all the entries with NULL data with placeholder data.
+UPDATE <table_name>
+SET <column_name> = <placeholder data>
+WHERE <column_name> IS NULL;
+
+#psql: Add a NOT NULL contraint to a table. This can only be done if the entries have no null data
+ALTER TABLE <table_name>
+ALTER COLUMN <column_name> SET NOT NULL;
+
+#psql: Remove the NOT NULL constrain from a table
+ALTER TABLE <table_name>
+ALTER COLUMN <column_name> DROP NOT NULL
+
+#psql: Add a complex constrain based on a conditional to a column
+ALTER TABLE <table_name>
+ADD CHECK (<column_name> <conditional>);
+
+#psql: Add a UNIQUE contraint to a column in a table 
+ALTER TABLE <table_name> 
+ADD UNIQUE (<column_name>);
+
+#psql: Designate a column as a primary key
+ALTER TABLE <table_name>
+ADD PRIMARY KEY (<column_name>); 
+
+#psql: Designate a column as a foreign key that references the primary key of table2
+# Adding ON DELETE CASCADE;  after (<column2_name>) causes the database to automatically delete rows in related child tables on DELETE queries
+ALTER TABLE <table1_name>
+ADD FOREIGN KEY (<column1_name>)
+REFERENCES <table2_name> (<column2_name>);
+
+#psql: Show the name of the current user 
+SELECT current_user;
+
+#psql: Show all the permissions of user 'user_name'
+SELECT grantor, grantee, table_schema, table_name, privilege_type
+FROM information_schema.table_privileges 
+WHERE grantee = 'user_name';
+
+#psql: Change the default permissions for <user_name> to include SELECT permissions on all new tables
+#Replace IN SCHEMA <schema_name> with IN DATABASE <database_name> to change default permissions on the whole database
+ALTER DEFAULT PRIVILEGES IN SCHEMA <schema_name>
+GRANT SELECT ON TABLES TO <user_name>;
+
+#psql: Show all the roles and their permissions
+SELECT * 
+FROM pg_catalog.pg_roles 
+ORDER BY rolname;
+
+#psql: Create a new user with the name <user_name> and the most basic priviledges
+#IN ROLE <group_name1>, <group_name2>; is optional and adds the newly created users to <group_name1>, <group_name2>
+CREATE ROLE <user_name> WITH NOSUPERUSER LOGIN IN ROLE <group_name1>, <group_name2>;
+
+#psql: Give specific permissions on table_name per column to role_name
+#You can omit (<column_name1>, <column_name2>) to give permissions on the whole table
+GRANT UPDATE (<column_name1>, <column_name2>) ON <table_name> TO <role_name>;
+
+#psql: Create a group of roles and add the users <user_name1>, <user_name2> to <group_name>
+CREATE ROLE <group_name> WITH NOLOGIN ROLE <user_name1>, <user_name2>;
+
+#psql: Gives the user <user_name> the permissions of <group_name>
+GRANT <group_name> TO <user_name>;
+
+#psql: Change the permissions of an existing user
+#Possible roles: SUPERUSER, NOSUPERUSER, CREATEROLE, NOCREATEROLE CREATEDB, NOCREATEDB, LOGIN
+#For more info: https://www.postgresql.org/docs/10/sql-createrole.html
+ALTER ROLE <user_name> WITH <role>
+
+#psql: Give Usage and create new tables permissions to <user_name> on <schema_name>
+GRANT USAGE, CREATE ON SCHEMA <schema_name> TO <user_name>;
+
+#psql: Give SELECT and UPDATE permissions on <table_name> in <schema_name> to <user_name>
+GRANT SELECT, UPDATE ON <schema_name>.<table_name> TO <user_name>;
+
+#psql: Take away the UPDATE permission from <user_name> from <table_name>
+REVOKE UPDATE ON <schema_name>.<table_name> FROM <user_name>;
+
+#Remove SELECT permissions from public users (PUBLIC can be thought of as an implicitly defined group that always includes all roles)
+REVOKE SELECT ON <table_name> FROM PUBLIC;
+
+#psql: Give row specific permissions on <table_name> to <role_name>. This statement only allows <role_name> to select <column_name> where the row value is current_user 
+CREATE POLICY emp_rls_policy ON <table_name> FOR SELECT 
+TO <role_name> USING (<column_name>=current_user);
+ALTER TABLE <table_name> ENABLE ROW LEVEL SECURITY;
+
+#psql: View the indexes of <table_name>
+SELECT *
+FROM pg_Indexes
+WHERE tablename = '<table_name>';
+
+#psql: Check how long a query takes to execute. 
+#You replace SELECT by UPDATE, DELETE, INSERT etc
+EXPLAIN ANALYZE SELECT *
+FROM <table_name>;
+
+#psql: Create an index called <index_name> on the column <column_name> in the table <table_name>
+# The naming convention for <index_name> is "<table_name>_<column_name>_idx"
+CREATE INDEX <index_name> ON <table_name> (<column_name>);
+
+#psql: Create a partial index on <column_name> which satisfies the <conditional>
+CREATE INDEX <index_name> ON <table_name> (<column_name>)
+WHERE <column_name2> LIKE <conditionial>;
+
+#psql: Remove an index from the database
+DROP INDEX IF EXISTS <index_name>;
+
+#psql: Re-Cluster the indexes of an index or table or the entire database if you use only CLUSTER. Clustering re-organizes the indexes.
+CLUSTER <table_name> IN <index_name>
+CLUSTER <table_name>;
+CLUSTER;
+
+#psql: Get the size in MB of <table_name>
+SELECT pg_size_pretty (pg_total_relation_size('<table_name>'));
+
+#psql: Get the current date and time.
+SELECT NOW();
 
 #sql: Create a database specifically for WordPress 
 CREATE DATABASE WordPress CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
@@ -75,17 +265,14 @@ CREATE USER 'username'@'host' IDENTIFIED WITH mysql_native_password BY 'password
 #Replace authentication_plugin with auth_socket but this prevents remote login
 CREATE USER 'username'@'host' IDENTIFIED WITH authentication_plugin BY 'password';
 
-#sql: Give full priviledges on database to specified user on localhost
+#mysql: Give full priviledges on database to specified user on localhost
 GRANT ALL PRIVILEGES ON database_name.* TO username@localhost
 
-#sql: Update MySQL Changes
+#mysql: Update MySQL Changes
 FLUSH PRIVILEGES;
 
-sql: Show all existing users and on which host they are.
+#mysql: Show all existing users and on which host they are.
 SELECT User, Host FROM mysql.user;
-
-sql: Select all columns from the table table_name
-SELECT * FROM table_name;
 
 #mysql: Shows all existing MySql Databases 
 SHOW DATABASES;

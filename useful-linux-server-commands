@@ -491,6 +491,9 @@ sudo node /var/www/my-site.com/public_html/server.js
 #Check PostGreSQL server status
 systemctl status postgresql
 
+#Reload the postgresql config file
+pg_ctl reload
+
 #login to PostGreSQL server with default user (postgres)
 sudo -u postgres psql
 
@@ -500,7 +503,6 @@ sudo -u postgres -i
 #Show the current storage directory of PostGreSQL. Both the first and second command do the same thing.
 sudo -u postgres psql -c "show data_directory;"
 ps aux | grep postgres | grep -- -D
-
 
 #Use pg_dump to export database data
 sudo -u postgres pg_dump

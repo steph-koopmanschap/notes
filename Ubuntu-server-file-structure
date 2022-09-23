@@ -57,6 +57,10 @@
 #PostGreSQL Config files
 /etc/postgresql/
 /etc/postgresql/14/main
+#Main PostgreSQL server config file
+/etc/postgresql/14/main/postgresql.conf
+#PostGreSQL client connection permissions config
+/etc/postgresql/14/main/pg_hba.conf
 
 #APT Package manager sources.
 /etc/apt/sources.list.d
