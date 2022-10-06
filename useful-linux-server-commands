@@ -132,7 +132,7 @@ diff -qr folder_name_a/ folder_name_b/
 shred -u file_name.file_extension
 
 #Ping a domain name or ip address
-ping domaine_name
+ping domain_name
 
 #Ping a domain name with only number_of_packets (should be an integer)
 ping -c number_of_packets $(domain_ame)
@@ -376,8 +376,17 @@ paste <(cat /sys/class/thermal/thermal_zone*/type) <(cat /sys/class/thermal/ther
 top
 htop
 
+#Start the GUI system monitor 
+sudo gnome-system-monitor
+
 #Terminates and shuts down the process with PID(number) or binary name(string)
 kill PID
+
+#Get the PID or Process ID of process-name
+pidof process-name
+
+#Change the priority of process-ID. priority can be a number from -20 to 20. To decrease priority you need root access.
+renice priority processes-PID  
 
 #displays the full binary path of program_name
 which program_name

@@ -59,6 +59,11 @@ CREATE TABLE table_name (
   column_two data_type,
 );
 
+#psql: Create a new table called table_name from a select query on another different table (table_name2)
+CREATE TABLE table_name AS
+SELECT <select_statement>
+FROM table_name2;
+
 #sql: Insert values into a table. Each value corresponds to a column
 INSERT INTO table_name (column_name1, column_name2)
 VALUES (
@@ -244,8 +249,38 @@ CLUSTER <table_name> IN <index_name>
 CLUSTER <table_name>;
 CLUSTER;
 
-#psql: Get the size in MB of <table_name>
-SELECT pg_size_pretty (pg_total_relation_size('<table_name>'));
+#psql: Get the size in MB of <table_name> including all its indexes.
+SELECT pg_size_pretty (pg_total_relation_size('<table_name>')) AS total_size;
+
+#psql: Get the size of the indexes in MB of <table_name>  
+SELECT pg_size_pretty(pg_indexes_size('<table_name>')) AS idx_size;
+
+#psql: Get the size in MB of <table_name> including excluding all its indexes.
+SELECT pg_size_pretty(pg_table_size('<table_name>')) as tbl_size;
+
+#psql: Get statistics on <table_name> when the last vacuum and autovacuum happened and how many dead and living tuples there are.
+# Remove WHERE relname = '<table_name>'; to check statistics of every table in the database.
+SELECT schemaname,
+    relname, 
+    last_vacuum,
+    last_autovacuum, 
+    last_analyze
+    n_live_tup
+    n_dead_tup
+FROM pg_stat_all_tables 
+WHERE relname = '<table_name>';
+
+#psql: Update the statistics of the table. The stats are updated in the pg_stat_all_tables table
+ANALYZE <table_name>;
+
+#psql: Remove dead tuples from a table to reduce disk space usage.
+VACUUM <table_name>;
+
+#psql: Same as VACUUM, but more aggresive. Very slow operation and blocks read/write operations. Should almost never be used.
+VACUUM FULL <table_name>;
+
+#psql: Completely clear <table_name> and delete every row inside it.
+TRUNCATE <table_name>;
 
 #psql: Get the current date and time.
 SELECT NOW();
