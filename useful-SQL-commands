@@ -311,3 +311,16 @@ SELECT User, Host FROM mysql.user;
 
 #mysql: Shows all existing MySql Databases 
 SHOW DATABASES;
+
+#sqlite3: Show all tables
+SELECT 
+    name
+FROM 
+    sqlite_schema
+WHERE 
+    type ='table' AND 
+    name NOT LIKE 'sqlite_%';
+
+#sqlite3: Execute an SQL script called file_name
+.read file_name.sql
+

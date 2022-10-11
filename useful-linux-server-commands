@@ -537,6 +537,12 @@ mysql -u root -p
 #Run mysql as username user
 mysql -u username -p
 
+#Create an SQLite database called database_name.db
+#sqlite3 database_name.db
+
+#Execute an SQL script called sql_script.sql on an SQLite database called database_name.db
+sqlite3 database_name.db ".read sql_script.sql"
+
 
 
 
