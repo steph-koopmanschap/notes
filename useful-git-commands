@@ -59,6 +59,9 @@ git reset HEAD -- fileName
 //Remove and delete the last commit on the current branch
 git reset --hard HEAD~1
 
+//Remove all local changes on current branch
+git reset --hard
+
 //Copy a git repository and name the local repo as clone_name (clone_name will be the directory name)
 git clone /path/to/repository clone_name
 
@@ -145,7 +148,13 @@ git branch –d branchName
 //Delete a branch that has never been merged or not been fully merged
 git branch –D branchName
 
-//Merge branchName into the current branch
+//View all branches including remote branches
+git branch -all
+
+//View which branches are tracked
+git branch -vv
+
+0//Merge branchName into the current branch
 git merge branchName
 
 //Switch to the main branch and then immediately merge branchName into the main branch
@@ -157,8 +166,17 @@ git push origin main
 //View all remote repositories
 git remote –v
 
+//Show info about remote branches and pull requests and tracked branches
+git remote show origin
+
+//Same as git remote origin, but can be used offline. Uses local cache to retrieve info.
+git remote show -n origin
+
 //Connect local repository to a remote server called hostName
 git remote add origin hostName
+
+//Add a new remote repo to the local repo called remoteName with source as url
+git remote add remoteName url.git
 
 //Check lines of code in a git repo
 git ls-files | xargs wc -l
@@ -171,9 +189,19 @@ git remote rm repositoryName
 //Use git merge origin/master to merge the commits from the fetch into the local main branch
 git fetch
 
+//Fetch a branch from the upstream remote repo to the local forked repo
+git fetch upstream branchName
+
 //This combines git fetch and git merge origin/master.
 //This merges all changes from the main remote branch to the local repo
 git pull
+git pull origin main
+
+//Sync the remote upstream repo with the local forked repo. 
+git pull upstream main
+
+//Merge branchName from the remote upstream repo in the current branch of the local forked repo
+git pull upstream branchName
 
 //Add the branchName to the remote repository. Note that this does not merge the branch with the main remote branch
 git push origin branchName

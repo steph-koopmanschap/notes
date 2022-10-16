@@ -505,6 +505,10 @@ pg_ctl reload
 
 #login to PostGreSQL server with default user (postgres)
 sudo -u postgres psql
+psql -U postgres
+
+# Start an .sql script called fileName.sql in PostGreSQL
+sudo psql -U postgres --echo-queries --file='./fileName.sql'
 
 #Login as the postgres user on the system
 sudo -u postgres -i
