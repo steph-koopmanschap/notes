@@ -197,6 +197,9 @@ git fetch upstream branchName
 git pull
 git pull origin main
 
+//This merges all changes from the remote repo into branchName
+git pull origin branchName
+
 //Sync the remote upstream repo with the local forked repo. 
 git pull upstream main
 
