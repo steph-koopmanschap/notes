@@ -258,6 +258,9 @@ SELECT pg_size_pretty(pg_indexes_size('<table_name>')) AS idx_size;
 #psql: Get the size in MB of <table_name> including excluding all its indexes.
 SELECT pg_size_pretty(pg_table_size('<table_name>')) as tbl_size;
 
+#psql Get the entire size of <database_name> Includes all tables and indexes.
+SELECT pg_size_pretty (pg_database_size ('feelsifyDB')) AS total_database_size;
+
 #psql: Get statistics on <table_name> when the last vacuum and autovacuum happened and how many dead and living tuples there are.
 # Remove WHERE relname = '<table_name>'; to check statistics of every table in the database.
 SELECT schemaname,
