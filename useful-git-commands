@@ -154,7 +154,7 @@ git branch -all
 //View which branches are tracked
 git branch -vv
 
-0//Merge branchName into the current branch
+//Merge branchName into the current branch
 git merge branchName
 
 //Switch to the main branch and then immediately merge branchName into the main branch
