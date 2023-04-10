@@ -290,6 +290,11 @@ sudo chown root:root /var/sftp
 sudo chmod 755 /var/sftp
 sudo chown user_name:user_name /var/sftp/Document
 
+# Ping a specific port on an adress. 
+# Replace address with the IP address or domain name
+# Replace port_number with the port number.
+nc -vz address port_number
+
 #Check Firewall status
 sudo ufw status verbose
 
@@ -546,6 +551,52 @@ mysql -u username -p
 
 #Execute an SQL script called sql_script.sql on an SQLite database called database_name.db
 sqlite3 database_name.db ".read sql_script.sql"
+
+# Show the current running Docker processes or containers 
+sudo docker ps
+
+# Show all Docker containers, uncliding non-running ones.
+sudo docker ps -a
+
+# Show docker-compose processes
+sudo docker-compose ps
+
+# Execute a docker-compose.yml (YAML) file.
+sudo docker compose up
+
+# Execute a docker-compose.yml (YAML) file, but re-build the image.
+sudo docker compose up --build
+
+# Show all the current docker images.
+sudo docker images
+
+# Delete a docker image. Note that if the image is attached to a container you need to stop and delete the container first.
+# Replace 0123456789ab with the image ID
+sudo docker rmi 0123456789ab
+# OR replace image_name with the image name.
+sudo docker rmi image_name
+
+# Stop a Docker container. Replace container_id with the container id.
+sudo docker stop container_id
+
+# Remove a Docker container. Replace container_id with the container id.
+# Note to remove a docker container you must first stop the container.
+sudo docker rm container_id
+
+# In the current directory where the Dockerfile is. Build an image with the TAG image_name
+sudo docker build -t image_name .
+
+# Run a Docker container.
+# replace external_port with the external port of the container (visible to host OS.) Integer.
+# replace container_port with the internal port of the container. Integer.
+# replace container_name with your desired container name.
+# replace docker_image with the docker image to use.
+sudo docker run -p external_port:container_port --name container_name docker_image
+
+# List all currently running networks on docker
+sudo docker network ls
+
+
 
 
 

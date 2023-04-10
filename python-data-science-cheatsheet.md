@@ -277,10 +277,42 @@ from scipy.stats import iqr
 iqr_value = iqr(df.column_name) 
 ```
 
+Create a covariance matrix between 2 variables. <br/>
+A covariance of 0 indicates no relationship between the variables. <br/>
+`cov_mat = np.cov(df.column_one, df.column_two)`
+
+Calculate the correlation between 2 variables. <br/>
+A value larger than .3 shows a linear association. <br/>
+A value larger than .6 shows a very strong linear association.
+```python
+from scipy.stats import pearsonr
+correlation, p = pearsonr(df.column_one, df.column_two)
+```
+
+Create a contingency table of frequencies between two categorical columns <br/>
+The contingency table shows the amount of times(counts) each combination of categories appears. <br/>
+`cont_freq = pd.crosstab(df.column_one, df.column_two)`
+
+Create a contingency table, using proportions(percentages) instead of counts.
+```python
+cont_freq = pd.crosstab(df.column_one, df.column_two)
+cont_prop = influence_leader_freq / len(df.column_one)
+```
+
 ### Data visualization
 
 Create a boxplot from a column in a dataframe
 ```python
+sns.boxplot(x='column_name', data=df)
+plt.show()
+plt.close()
+```
+
+Create a side by side boxplot from a column vs another column in a dataframe. <br/>
+x is usually a category while y is a numerical data. <br/>
+boxplots that overlap show a weak association between the values and the categories.
+```python
+sns.boxplot(data = df, x = 'column_one', y = 'column_two')
 sns.boxplot(x='column_name', data=df)
 plt.show()
 plt.close()
@@ -293,16 +325,34 @@ plt.show()
 plt.close()
 ```
 
-Create a bar chart from a column in a dataframe. The barchart visualises the counts of each value in the column
+Create two histograms on top of each other from two series. <br/>
+Alpha sets the transparency for each histogram.
+```python
+plt.hist(series_one , color="blue", label="series one", density=True, alpha=0.5)
+plt.hist(series_two , color="red", label="series two", density=True, alpha=0.5)
+plt.legend()
+plt.show()
+plt.close()
+```
+
+Create a bar chart from a column in a dataframe. The barchart visualises the counts of each value in the column.
 ```python
 sns.countplot(x='column_name', data=df)
 plt.show()
 plt.close()
 ```
 
-Create a bar chart from a column in a dataframe. The piechart visualises the counts of each value in the column
+Create a bar chart from a column in a dataframe. The piechart visualises the counts of each value in the column.
 ```python
 df.column_name.value_counts().plot.pie()
 plt.show()
 plt.close()
+```
+
+Create a scatter plot to see a relationship between two columns. The values in both columns are usually continuous and non-categorical.
+```python
+plt.scatter(x = df.column_one, y = df.column_two)
+plt.xlabel('column one')
+plt.ylabel('column two')
+plt.show()
 ```

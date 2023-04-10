@@ -20,6 +20,9 @@ host all all all reject
 #psql: Reload/Refresh the postgresql config file. (in case changes have been made to it)
 SELECT pg_reload_conf ()
 
+#psql: Show where the postgresql config is stored on the filesystem.
+SHOW config_file;
+
 #psql: Show all databases
 \l
 \list
