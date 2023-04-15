@@ -130,6 +130,9 @@ git checkout branchName
 //Using force checkout may discard any unsaved/uncommitted changes you made in the branch
 git checkout -f branchName
 
+//Create a local branch called localBranchName that tracks a remote branch called remoteBranchName
+git checkout -d localBranchName origin/remoteBranchName
+
 //See all branches in the repository. The asterisk '*' shows what branch you are on.
 git branch
 
@@ -188,6 +191,9 @@ git remote rm repositoryName
 //Git fetch does not merge any changes to the local repo.
 //Use git merge origin/master to merge the commits from the fetch into the local main branch
 git fetch
+
+//Download a remote branch and create a local branch from it. 
+git fetch origin branchName
 
 //Fetch a branch from the upstream remote repo to the local forked repo
 git fetch upstream branchName

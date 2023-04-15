@@ -1,0 +1,28 @@
+# Useful commands for Django server
+
+# Start Django Server on port 8000 
+python3 manage.py runserver 8000
+
+# Create a file with instructions for the database to create tables. The file is stored in the migrations folder.
+python3 manage.py makemigrations
+
+# Apply model changes in django to the database (executes the file created from 'makemigrations')
+python3 manage.py migrate 
+
+# Show all the migrations for an app called app_name
+python3 manage.py showmigrations app_name
+
+# Revert a migration for a specific app. Migration names can be found with the 'showmigrations' command. You only need to use the number of the migration.
+python3 manage.py migrate app_name migration_name
+
+# Create a new app in the Django project
+python3 manage.py startapp myapp
+
+# Show available commands for Django 
+python manage.py help
+
+# Run a test for Django
+python manage.py test
+
+# Start python shell, but with django apps/context and database loaded.
+python3 manage.py shell
