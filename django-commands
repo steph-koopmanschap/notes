@@ -18,6 +18,9 @@ python3 manage.py migrate app_name migration_name
 # Create a new app in the Django project
 python3 manage.py startapp myapp
 
+# Create an admin account on django
+python3 manage.py createsuperuser
+
 # Show available commands for Django 
 python manage.py help
 
@@ -26,3 +29,21 @@ python manage.py test
 
 # Start python shell, but with django apps/context and database loaded.
 python3 manage.py shell
+
+# Check the current version of django
+django-admin --version
+
+# Put all the install python packages and modules in the current virtual environment in a text file.
+pip freeze > requirements.txt
+
+# Install the required python packages and modules for the current virtual environment.
+pip install -r requirements.txt
+
+# Create a python virtual environment called project_env 
+python3 -m venv project_env
+
+# Activate or start the python virtual environment
+source my_project/bin/activate
+
+# Deactivate the virtual environment 
+deactivate 
