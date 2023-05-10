@@ -1,5 +1,8 @@
 # Useful commands for Django server
 
+# Create a new Django project called my_project
+django-admin startproject my_project
+
 # Start Django Server on port 8000 
 python3 manage.py runserver 8000
 
@@ -15,22 +18,25 @@ python3 manage.py showmigrations app_name
 # Revert a migration for a specific app. Migration names can be found with the 'showmigrations' command. You only need to use the number of the migration.
 python3 manage.py migrate app_name migration_name
 
-# Create a new app in the Django project
+# Delete all data in the database. Deletes every record of every table, but keeps the tables intact.
+python manage.py flush
+
+# Create a new app in the Django project.
 python3 manage.py startapp myapp
 
-# Create an admin account on django
+# Create an admin account on django.
 python3 manage.py createsuperuser
 
-# Show available commands for Django 
+# Show available commands for Django .
 python manage.py help
 
-# Run a test for Django
+# Run a test for Django.
 python manage.py test
 
 # Start python shell, but with django apps/context and database loaded.
 python3 manage.py shell
 
-# Check the current version of django
+# Check the current version of django.
 django-admin --version
 
 # Put all the install python packages and modules in the current virtual environment in a text file.
@@ -39,11 +45,25 @@ pip freeze > requirements.txt
 # Install the required python packages and modules for the current virtual environment.
 pip install -r requirements.txt
 
-# Create a python virtual environment called project_env 
+# Uninstall package_name
+pip uninstall package_name
+
+# Create a python virtual environment called project_env .
 python3 -m venv project_env
 
-# Activate or start the python virtual environment
+# Activate or start the python virtual environment.
 source my_project/bin/activate
 
-# Deactivate the virtual environment 
+# Deactivate the virtual environment .
 deactivate 
+
+# Show where the global python modules/packages are stored for the current user.
+python3 -m site --user-site
+
+# Print a list of URLS being used in the app. (This command can only be used in the django-extensions package)
+python manage.py show_urls
+
+# Generate a graph of the models and their relationships. (This command can only be used in the django-extensions package)
+python manage.py graph_models -a -o myapp_models.png
+
+

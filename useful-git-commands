@@ -35,17 +35,26 @@ Production builds
 //Create new local git repository in current directory
 git init
 
+//Show all current git settings
+git config -l
+
 //Add your git username to the project/rep
 git config user.email "myemail@example.com" 
 
 //Add your git name to the project/repo
 git config user.name "myname"
 
+//Check the current username in use for the current git working directory
+git config user.name
+
 //New directory projectName in current directory and create git repository in that directory
 git init projectName
 
 //Sign all commits in all repositories with userName
 git config --global user.name "userName"
+
+//Check the current username in use for all git repositories.
+git config --global user.name
 
 //Sign all commits in all repositories with e-mail myMail
 git config --global user.email "myMail@host.com"
