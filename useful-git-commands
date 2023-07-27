@@ -147,6 +147,7 @@ git branch
 
 //Show every available branch from both the local and the remote repo.
 git branch -a
+git branch -all
 
 //create a new branch named branchName
 git branch branchName
@@ -159,9 +160,6 @@ git branch –d branchName
 
 //Delete a branch that has never been merged or not been fully merged
 git branch –D branchName
-
-//View all branches including remote branches
-git branch -all
 
 //View which branches are tracked
 git branch -vv

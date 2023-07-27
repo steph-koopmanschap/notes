@@ -210,6 +210,9 @@ Creates a new data frame with the values of column filtered based on the conditi
 `new_df = df[df['column_name'] conditional_operator value]` <br/>
 Replace conditional_operator with >, <, ==, !=, etc.
 
+Remove duplicate rows based on the "column_name" column <br/>
+`new_df = df.drop_duplicates(subset='column_name')`
+
 ### Create pivot table
 
 ```python
@@ -220,7 +223,7 @@ pivotTable = df.pivot(columns='ColumnToPivot',
 
 ### Merge DataFrames (tables) together
 
-Merge two tables together. <br/>
+Merge two tables together. (inner_merge) <br/>
 `new_df = pd.merge(df1, df2)` <br/>
 or <br/>
 `new_df = df1.merge(df2)` 

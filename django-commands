@@ -50,9 +50,11 @@ pip uninstall package_name
 
 # Create a python virtual environment called project_env .
 python3 -m venv project_env
+python -m venv venv
 
 # Activate or start the python virtual environment.
 source my_project/bin/activate
+source venv/bin/activate
 
 # Deactivate the virtual environment .
 deactivate 
