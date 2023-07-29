@@ -147,7 +147,7 @@ git branch
 
 //Show every available branch from both the local and the remote repo.
 git branch -a
-git branch -all
+git branch --all
 
 //create a new branch named branchName
 git branch branchName
