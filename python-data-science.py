@@ -4,7 +4,7 @@
 ######################################
 
 from sympy import *
-from scipy.stats import binom, beta, norm
+from scipy.stats import binom, beta, norm, t
 import numpy as np
 from collections import defaultdict
 import math
@@ -132,6 +132,10 @@ def get_variance_sample(values):
 def get_standard_deviation_sample(values):
     return math.sqrt(get_variance_sample(values))
 
+# quantifies how spread out a distribution is
+def get_coefficient_of_variation(mean, std_dev):
+    return std_dev / mean
+
 # returns likelihood at value x in the PDF
 def normal_probability_density_function(x_point: float, mean: float, std_dev: float) -> float:
     return (1.0 / (2.0 * math.pi * std_dev ** 2) ** 0.5) * math.exp(-1.0 * ((x_point - mean) ** 2 / (2.0 * std_dev ** 2)))
@@ -168,10 +172,65 @@ def generate_random_normal_distribution(numbers, mean, std_dev):
         distribution.append(random_value)
     return distribution
 
-# Convert an x_point to a z-score.
+# Convert an x_point to a z-score. Take an x-value and scale it in terms of standard deviation
 def get_z_score(x_point, mean, std_dev):
     return (x_point - mean) / std_dev
 
 # Convert a z-score to an x_point
 def z_score_to_x(z_score, mean, std_dev):
     return (z_score * std_dev) + mean
+
+def standard_normal_distribution():
+    return norm(loc=0.0, scale=1.0)
+
+# level of confidence is a probability
+def critical_z_value(level_of_confidence: float):
+    if level_of_confidence <= 0.0 or level_of_confidence >= 1.0:
+        raise ValueError("level_of_confidence must be between 0.0 and 1.0")
+    norm_dist = standard_normal_distribution()
+    left_tail_area = (1.0 - level_of_confidence) / 2.0
+    upper_area = 1.0 - ((1.0 - level_of_confidence) / 2.0)
+    return [norm_dist.ppf(left_tail_area), norm_dist.ppf(upper_area)]
+
+def get_margin_of_error(critical_z, sample_size, std_dev_sample):
+    if sample_size < 31:
+        raise ValueError("sample_size must be greater than 31")
+    return critical_z * (std_dev_sample / math.sqrt(sample_size))
+
+# confidence interval is a range calculation showing
+# how confidently a sample mean falls in a range for the population mean.
+def get_confidence_interval(level_of_confidence: float, sample_size: int, mean_sample, std_dev_sample):
+    critical_z = critical_z_value(level_of_confidence)
+    margin_of_error = get_margin_of_error(critical_z, sample_size, std_dev_sample)
+    return [mean_sample - margin_of_error, mean_sample + margin_of_error]
+
+# For 95% confidence level
+# Used for sample sizes smaller than 31
+def get_critical_t_value_range(sample_size):
+    if sample_size > 31:
+        raise ValueError("sample_size must be less than 31")
+    lower = t.ppf(.025, df=sample_size-1)
+    upper = t.ppf(.975, df=sample_size-1)
+    return [lower, upper]
+    
+# p value For 95%
+def get_p_value(mean, std_dev):
+    # Calculate the x-value that has 2.5% of area behind it.
+    lower_bound = norm.ppf(.025, mean, std_dev)
+    # Calculate the x-value that has 97.5% of area behind it.
+    upper_bound = norm.ppf(.975, mean, std_dev)
+    
+    p1 = norm.cdf(lower_bound, mean, std_dev) # p value of lower tail
+    p2 = norm.cdf(upper_bound, mean, std_dev) # p value of upper tail
+    # P-value of both tails
+    return {
+        "range": {
+                "lower_bound": lower_bound,
+                "upper_bound": upper_bound
+            },
+        "p_values": {
+                "lower_tail": p1,
+                "upper_tail": p2,
+                "both_tails": p1 + p2
+            }
+        }
