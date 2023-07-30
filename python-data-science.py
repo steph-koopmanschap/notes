@@ -3,12 +3,15 @@
 # FUNCTIONS HELPFUL FOR DATA SCIENCE #
 ######################################
 
-from sympy import *
-from scipy.stats import binom, beta, norm, t
-import numpy as np
-from collections import defaultdict
 import math
 import random
+from collections import defaultdict
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sympy import *
+from scipy.stats import binom, beta, norm, t
+from sklearn.linear_model import LinearRegression
 
 # Declare 'x' and 'y' to SymPy
 x,y = symbols('x', 'y')
@@ -234,3 +237,46 @@ def get_p_value(mean, std_dev):
                 "both_tails": p1 + p2
             }
         }
+
+# Get the m and b values for a linear regression using sklearn
+def get_m_b_linear_regression(data):
+    # Extract input variables (all rows, all columns but last column)
+    X = data.values[:, :-1]
+    # Extract output column (all rows, last column)
+    Y = data.values[:, -1]
+    # Fit a line to the points
+    fit = LinearRegression().fit(X, Y)
+    m = fit.coef_.flatten()
+    b = fit.intercept_.flatten()
+    return {
+        'm': m,
+        'b': b
+    }
+
+# Get the m and b values for a linear regression using closed form solution
+# Note that this may be slow and can only work for 2D data.
+def get_m_b_linear_regression_closed_form(points):
+    sample_size = len(points)
+
+# Calculate the sum of squares for a linear regression line
+def get_sum_of_squares(points, m, b):
+    sum_of_squares = 0.0
+    # calculate sum of squares
+    for p in points:
+        y_actual = p.y
+        y_predict = m*p.x + b
+        residual_squared = (y_predict - y_actual)**2
+        sum_of_squares += residual_squared
+        
+    return sum_of_squares
+    
+# Plot the linear regression line
+def plot_linear_regression(data, m, b):
+    # Extract input variables (all rows, all columns but last column)
+    X = data.values[:, :-1]
+    # Extract output column (all rows, last column)
+    Y = data.values[:, -1]
+    # show in chart
+    plt.plot(X, Y, 'o') # scatterplot
+    plt.plot(X, m*X+b) # line
+    plt.show()
