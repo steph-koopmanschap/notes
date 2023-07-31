@@ -221,6 +221,25 @@ pivotTable = df.pivot(columns='ColumnToPivot',
          values='ColumnToBeValues').reset_index()
 ```
 
+### Create a contingency table
+```python
+from scipy.stats import chi2_contingency
+# Create a simple contingency table
+contingency_table_frequencies = df.crosstab(df['A'], df['B'])
+# Add the marginal (total) counts to the congtingency table
+contingency_table_with_counts = df.crosstab(df['A'], df['B'], margins=True, margins_name='Total')
+# Create a congtingency table as proportions
+contingency_table_proportions = contingency_table_with_counts / len(df)
+# Create an expected contingency table if there is no associations; using the chi-square test
+chi2, pval, dof, expected = chi2_contingency(contingency_table_frequencies)
+expected = np.round(expected)
+# Compare the observed (contingency_table_frequencies) and expected tables
+# TODO: Resolve error
+# comparison_table = pd.DataFrame({'Observed': contingency_table_frequencies.values.flatten(),
+#                                  'Expected': expected.flatten()},
+#                                 index=contingency_table_frequencies.index)
+```
+
 ### Merge DataFrames (tables) together
 
 Merge two tables together. (inner_merge) <br/>
