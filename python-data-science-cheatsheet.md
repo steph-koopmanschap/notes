@@ -192,6 +192,10 @@ Give individual manual values. <br/>
 Applies value based on other row value (multiply value by 2 in this case). <br/>
 `df['column_name'] = df.column_name2 * 2`
 
+### Convert all column names of a dataframe to a list
+
+`column_names = df.columns.tolist()`
+
 ### Sorting data frames
 
 Sort dataFrame by values of a column_name by descending and putting the NaN values last. (Returns new DataFrame) <br/>
@@ -219,25 +223,6 @@ Remove duplicate rows based on the "column_name" column <br/>
 pivotTable = df.pivot(columns='ColumnToPivot',
          index='ColumnToBeRows',
          values='ColumnToBeValues').reset_index()
-```
-
-### Create a contingency table
-```python
-from scipy.stats import chi2_contingency
-# Create a simple contingency table
-contingency_table_frequencies = df.crosstab(df['A'], df['B'])
-# Add the marginal (total) counts to the congtingency table
-contingency_table_with_counts = df.crosstab(df['A'], df['B'], margins=True, margins_name='Total')
-# Create a congtingency table as proportions
-contingency_table_proportions = contingency_table_with_counts / len(df)
-# Create an expected contingency table if there is no associations; using the chi-square test
-chi2, pval, dof, expected = chi2_contingency(contingency_table_frequencies)
-expected = np.round(expected)
-# Compare the observed (contingency_table_frequencies) and expected tables
-# TODO: Resolve error
-# comparison_table = pd.DataFrame({'Observed': contingency_table_frequencies.values.flatten(),
-#                                  'Expected': expected.flatten()},
-#                                 index=contingency_table_frequencies.index)
 ```
 
 ### Merge DataFrames (tables) together
@@ -301,6 +286,8 @@ iqr_value = iqr(df.column_name)
 
 Create a covariance matrix between 2 variables. <br/>
 A covariance of 0 indicates no relationship between the variables. <br/>
+Note that Covariance and correlation measure the strength of linear associations, but not other types of relationships. <br/>
+Covariance measures the strength of a linear relationship between quantitative variables. <br/>
 `cov_mat = np.cov(df.column_one, df.column_two)`
 
 Calculate the correlation between 2 variables. <br/>
@@ -313,12 +300,18 @@ correlation, p = pearsonr(df.column_one, df.column_two)
 
 Create a contingency table of frequencies between two categorical columns <br/>
 The contingency table shows the amount of times(counts) each combination of categories appears. <br/>
-`cont_freq = pd.crosstab(df.column_one, df.column_two)`
-
-Create a contingency table, using proportions(percentages) instead of counts.
+`contingency_table_frequencies = df.crosstab(df['A'], df['B'])` <br/>
+Add the marginal (total) counts to the congtingency table <br/>
+`contingency_table_with_counts = df.crosstab(df['A'], df['B'], margins=True, margins_name='Total')` <br/>
+Create a contingency table, using proportions(percentages) instead of counts. <br/>
+`contingency_table_proportions = contingency_table_with_counts / len(df)` <br/>
+Create an expected contingency table if there is no associations; using the chi-square test.
+The relevant value of `chi2` depends on the size of the table, but
+if `chi2` is larger than 4 in a 2x2 table that strongly suggest an association between the variables. 
 ```python
-cont_freq = pd.crosstab(df.column_one, df.column_two)
-cont_prop = influence_leader_freq / len(df.column_one)
+from scipy.stats import chi2_contingency
+chi2, pval, dof, expected = chi2_contingency(contingency_table_frequencies)
+expected = np.round(expected)
 ```
 
 ### Data visualization
