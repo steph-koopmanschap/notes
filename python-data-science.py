@@ -50,6 +50,10 @@ def get_odds(probability):
 def get_probability_from_odds(odds):
     return float(odds / (1.0 + odds))
 
+# Get the probability of a single event occurring
+def get_probability_event(event, all_possible_outcomes):
+    return float(event / len(all_possible_outcomes))
+
 # Calculate the probability of 2 independent events occurring.
 # P1 AND P2
 # p1 = probability of event 1 occurring
