@@ -1,6 +1,6 @@
 # Python Data Science cheatsheet
 
-### Data science definitions:
+### Statistics definitions:
 
 - Mean: Average. calculated as the sum of all values divided by the number of values. 
 - Median: The middle value of the variable when sorted.
@@ -18,6 +18,86 @@
 - How many unique columns/features do we have?
 - Which columns (if any) contain missing data?
 - What is the data type of each column?
+
+### Categories of variables in data science
+
+1. **Numerical Variables:** <br/>
+Numerical variables represent quantities and can take on numerical values. They can be further classified into two subtypes:
+
+a. **Continuous Variables:** <br/> 
+Continuous variables can take any value within a specific range. They have an infinite number of possible values. Examples include height, weight, temperature, and time.
+
+b. **Discrete Variables:** <br/>
+Discrete variables can only take specific, distinct values. They often represent counts or whole numbers. Examples include the number of children in a family, the number of items sold, and the number of cars in a parking lot.
+
+2. **Categorical Variables:** <br/>
+Categorical variables represent categories or labels. They can be further classified into two subtypes:
+
+a. **Nominal Variables:** <br/>
+Nominal variables have categories with no inherent order or ranking. Examples include gender (male, female), colors (red, blue, green), and country names.
+
+b. **Ordinal Variables:** <br/>
+Ordinal variables have categories with a natural order or ranking. The categories have a relative position but do not necessarily have equal intervals between them. Examples include education level (e.g., high school, bachelor's degree, master's degree), customer satisfaction rating (e.g., low, medium, high), and age groups (e.g., young, middle-aged, elderly).
+
+3. **Time Series Variables:** <br/>
+Time series variables are a special type of numerical variable representing values recorded at different points in time. They are used to analyze data with a temporal order, such as stock prices, weather data, or daily sales figures.
+
+4. **Boolean Variables:** <br/>
+Boolean variables represent binary data with only two possible values, typically "True" or "False." They are used for binary classification tasks or to represent logical conditions in data processing.
+
+5. **Text Variables:** <br/>
+Text variables represent textual data, such as sentences, paragraphs, or entire documents. They are commonly used in natural language processing (NLP) tasks, such as sentiment analysis, text classification, and language translation.
+
+6. **Multi-categorical Variables:** <br/>
+ Multi-categorical variables are categorical variables with more than two categories. They can be nominal or ordinal depending on the nature of the categories.
+
+Understanding the type of each variable is crucial for data analysis and modeling because it determines the appropriate statistical methods, visualization techniques, and machine learning algorithms that can be applied to the data. Different variable types require different treatment and processing steps during the data preparation and analysis phases.
+
+### Correlation methods
+
+To check if two variables are correlated or associated, various statistical methods are available, and their applicability depends on the types of variables involved. Here's a summary of the methods and the types of variables they apply to:
+
+1. **Pearson Correlation Coefficient**:
+   - Applicable to: Continuous variables.
+   - Description: Measures the strength and direction of the linear relationship between two continuous variables. It assumes that the data is normally distributed.
+
+2. **Spearman Rank Correlation**:
+   - Applicable to: Both continuous and ordinal variables.
+   - Description: Assesses the monotonic (non-linear) relationship between two variables. It calculates the correlation based on the ranks of the data rather than the actual data values.
+
+3. **Kendall Rank Correlation**:
+   - Applicable to: Both continuous and ordinal variables.
+   - Description: Measures the ordinal association between two variables based on the concordant and discordant pairs of data points. Like Spearman's correlation, it is robust to outliers and non-linear relationships.
+
+4. **Point-Biserial Correlation**:
+   - Applicable to: One continuous variable and one binary variable.
+   - Description: Measures the correlation between a continuous variable and a binary (0/1) variable. It is a special case of Pearson correlation for one continuous and one dichotomous variable.
+
+5. **Cramer's V**:
+   - Applicable to: Two categorical variables.
+   - Description: Measures the association between two categorical variables by calculating the chi-square statistic and normalizing it. It ranges from 0 to 1, with 0 indicating no association and 1 indicating a perfect association.
+
+6. **Contingency Table Analysis (Chi-Square Test)**:
+   - Applicable to: Two categorical variables.
+   - Description: Determines if there is a significant association between two categorical variables by comparing observed and expected frequencies in a contingency table.
+
+7. **Cross-Tabulation**:
+   - Applicable to: Two categorical variables.
+   - Description: Presents the frequency distribution of one categorical variable relative to another categorical variable, helping to identify patterns and associations.
+
+8. **Phi Coefficient (φ)**:
+   - Applicable to: Two binary variables.
+   - Description: Measures the association between two binary variables. It is a special case of Cramer's V for two binary variables.
+
+9. **Autocorrelation**:
+   - Applicable to: Time series data (continuous or discrete) representing a single variable over time.
+   - Description: Measures the correlation of a variable with its own past values at different lags.
+
+10. **Cross-Correlation**:
+    - Applicable to: Time series data (continuous or discrete) representing two variables over time.
+    - Description: Measures the correlation between two time series data sets at different lags, indicating potential lagged relationships.
+
+Remember that the choice of the appropriate method depends on the type of data you have and the specific research question you want to answer. Always consider the nature of the variables and the underlying assumptions of each method when interpreting the results.
 
 ### Install data science packages
 
