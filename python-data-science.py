@@ -71,12 +71,17 @@ def get_untion_probability_mutual(p1, p2):
 def get_untion_probability_non_mutual(p1, p2):
     return p1 + p2 - (get_joint_probability(p1, p2))
 
+# Creates a binomial distrubution using the probability mass function
 def get_binomial_distribution(probability, trials):
     distribution = []
     for k in range(trials + 1):
         prob = binom.pmf(k, trials, probability)
         distribution.append(prob)
     return distribution
+
+# Get the probabily for a specific value in number of trials using the PMF
+def get_pmf_value(value, probability, trials):
+    return binom.pmf(value, trials, probability)
 
 # Beta distribution
 # Returns the probability(underlying success rate) that an event with a successes and b failures has a probability or less of occuring.

@@ -299,10 +299,57 @@ Remove duplicate rows based on the "column_name" column <br/>
 
 ### Create pivot table
 
+Create a simple pivot table with the mean() aggregate function.
+Pivots all numeric columns.
 ```python
-pivotTable = df.pivot(columns='ColumnToPivot',
-         index='ColumnToBeRows',
-         values='ColumnToBeValues').reset_index()
+pivot = pd.pivot_table(
+    data=df,
+    index='ColumnToBeRows'
+)
+```
+
+Specify the aggregate function for pivoting.
+```python
+pivot = pd.pivot_table(
+    data=df,
+    index='ColumnToBeRows',
+    aggfunc='sum'
+)
+```
+
+Apply different aggregate functions per numerical column.
+```python
+pivot = pd.pivot_table(
+    data=df,
+    index='ColumnToBeRows',
+    aggfunc={'Column2': 'mean', 'Column3': 'sum'}
+)
+```
+
+Add totals margins to a pivot table
+```python
+pivot = pd.pivot_table(
+    data=df,
+    index='ColumnToBeRows'
+    margins=True,
+    margins_name='Total'
+)
+```
+
+Add totals margins to a pivot table
+```python
+pivot = pd.pivot_table(
+    data=df,
+    index='ColumnToBeRows',
+    sort=True
+)
+```
+
+```python
+pivot = df.pivot(
+      columns='ColumnToPivot',
+      index='ColumnToBeRows',
+      values='ColumnToBeValues').reset_index()
 ```
 
 ### Merge DataFrames (tables) together
@@ -393,6 +440,9 @@ from scipy.stats import chi2_contingency
 chi2, pval, dof, expected = chi2_contingency(contingency_table_frequencies)
 expected = np.round(expected)
 ```
+Generate random numbers
+`np.random.choice(range(x_start, x_end), size=n, replace=True)`
+
 
 ### Data visualization
 
