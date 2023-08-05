@@ -209,6 +209,9 @@ Where x is a value. Note that the value should be the same datatype as the other
 Cast the datatypes in a column to a different datatype. <br/>
 `df['column_name'] = df['column_name'].astype('dataType')` <br/>
 
+Convert a column of dates to datetime objects <br/>
+`df['Date'] = pd.to_datetime(df['Date'])` <br/>
+
 Cast a column to a category with an order <br/>
 `df['column_name'] = pd.Categorical(df['column_name'], ['value1', 'value2', 'value3'], ordered=True)`
 
@@ -445,6 +448,9 @@ Generate random numbers
 
 
 ### Data visualization
+
+Convert a column of datetime objects in a dataframe to numerical value for plotting.
+`df["Date"] = df["Date"].apply(mdates.date2num)`  
 
 Create a boxplot from a column in a dataframe
 ```python
