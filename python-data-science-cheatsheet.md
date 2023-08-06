@@ -199,6 +199,10 @@ Show the number of dimensions of the table <br/>
 Show the number of elements of the table. <br/>
 `print(df.size)`
 
+Shows the number of rows and columns of the table <br/>
+Returns a tuple with the first showing number of rows and the second showing number of columns
+`print(df.shape)`
+
 Get the number of elements in a column. <br/>
 `column_size = len(df.column_name)`
 
@@ -298,7 +302,7 @@ Creates a new data frame with the values of column filtered based on the conditi
 Replace conditional_operator with >, <, ==, !=, etc.
 
 Remove duplicate rows based on the "column_name" column <br/>
-`new_df = df.drop_duplicates(subset='column_name')`
+`new_df = df.drop_duplicates(subset='column_name')` <br/>
 
 ### Create pivot table
 

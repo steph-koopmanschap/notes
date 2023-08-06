@@ -3,6 +3,7 @@
 # FUNCTIONS HELPFUL FOR DATA SCIENCE #
 ######################################
 
+import re 
 import math
 import random
 from collections import defaultdict
@@ -15,6 +16,34 @@ from sklearn.linear_model import LinearRegression
 
 # Declare 'x' and 'y' to SymPy
 x,y = symbols('x', 'y')
+
+# Count the number of missing values (NA/null) values for a dataframe column
+def missing_count_in_column(x):
+    return sum(x.isnull())
+
+# Count the number of missing values (NA/null) values for a dataframe of all columns
+def missing_count_all_column(df):
+    return df.apply(missing_count_in_column, axis = 0)
+
+# Count the number of missing values (NA/null) values for a dataframe of all rows
+def missing_count_all_row(df):
+    return df.apply(missing_count_in_column, axis = 1)
+
+# Returns an array of all emails found in a given text
+def extract_emails_text(text):
+    re.findall(r"([\w.-]+@[\w.-]+)", text)
+
+# Remove all emojis from a given text
+def remove_emojis_text(text):
+    text.encode('ascii', 'ignore').decode('ascii')
+
+# Returns a new dataframe with only the categorical variables as columns
+def get_catagorical_vars(df):
+    return df.select_dtypes("object")
+
+# Returns a new dataframe with only the numerical variables as columns
+def get_catagorical_vars(df):
+    return df.select_dtypes("number")
 
 # f = function to calculate derivative function of
 # example:
@@ -79,17 +108,34 @@ def get_binomial_distribution(probability, trials):
         distribution.append(prob)
     return distribution
 
-# Get the probabily for a specific value in number of trials using the PMF
+# Get the probability for a specific value in number of trials with a given probability per trial using the PMF
 def get_pmf_value(value, probability, trials):
-    return binom.pmf(value, trials, probability)
+    return binom.pmf(value, n=trials, p=probability)
+
+# Returns the probabality of event x or less occuring
+# for a given sample_size and probability
+def get_cdf_less_than(event_x, sample_size: int, probability: float):
+    return binom.cdf(event_x, sample_size, probability)
+
+# Returns the probabality of event x or more occuring
+# for a given sample_size and probability
+def get_cdf_greater_than(event_x, sample_size: int, probability: float):
+    return 1 - binom.cdf(event_x, sample_size, probability)
+
+# Returns the probabality of events a to b occuring
+# for a given sample_size and probability
+def get_cdf_range(event_a, event_b, sample_size: int, probability: float):
+    if event_a >= event_b:
+        raise ValueError("event_a can not be larger or equal than event_b")
+    return binom.cdf(event_b, sample_size, probability) - binom.cdf(event_a, sample_size, probability)
 
 # Beta distribution
 # Returns the probability(underlying success rate) that an event with a successes and b failures has a probability or less of occuring.
-def get_cumalative_density_function(probability, successes, failures):
+def get_beta_cdf(probability, successes, failures):
     return beta.cdf(probability, successes, failures)
 
 # Returns the probability(underlying success rate) that an event with a successes and b failures has a between prob_a and prob_b of occurring.
-def get_cdf_range(prob_a, prob_b, successes, failures):
+def get_beta_cdf_range(prob_a, prob_b, successes, failures):
     if prob_a >= prob_b:
         raise ValueError("prob_a can not be larger or equal than prob_b")
     return beta.cdf(prob_b, successes, failures) - beta.cdf(prob_a, successes, failures)
@@ -159,10 +205,14 @@ def normal_pdf_range(mean, std_dev, start_range, end_range, step=0.1):
         distribution.append(normal_probability_density_function(i, mean, std_dev))
     return distribution
 
-#Cumulative Density Function
-# Returns the probability of x_point occurring
-def normal_cdf(x_point, mean, std_dev):
+# Normal Cumulative Density Function
+# Returns the probability of x_point or less occurring
+def normal_cdf_less_than(x_point, mean, std_dev):
     return norm.cdf(x_point, mean, std_dev)
+
+# Returns the probability of x_point or more occurring
+def normal_cdf_greater_than(x_point, mean, std_dev):
+    return 1 - norm.cdf(x_point, mean, std_dev)
 
 # Returns the probability of a range between x_point_a and x_point_b occuring
 def normal_cdf_range(x_point_a, x_point_b, mean, std_dev):
