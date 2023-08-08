@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sympy import *
-from scipy.stats import binom, beta, norm, t
+from scipy.stats import binom, beta, norm, t, poisson
 from sklearn.linear_model import LinearRegression
 
 # Declare 'x' and 'y' to SymPy
@@ -224,6 +224,35 @@ def normal_cdf_range(x_point_a, x_point_b, mean, std_dev):
 # Returns that a value has a probability or less of occuring
 def inverse_cdf(probability: float, mean, std_dev):
     return norm.ppf(probability, loc=mean, scale=std_dev)
+
+# Poisson Probability Mass Function
+# average = How many events on average are expected to happen for a given time or timeframe
+# events = Calculate the probability of how many events could happen for a given time or timeframe
+def get_poisson_pmf(events, average):
+    return poisson.pmf(events, average)
+
+# Poisson Cumulative Density Function
+# average = How many events on average are expected to happen for a given time or timeframe
+# events = Calculate the probability of how many events or less could happen for a given time or timeframe
+def get_poisson_less_than(events, average):
+    return poisson.cdf(events, average)
+
+# average = How many events on average are expected to happen for a given time or timeframe
+# events = Calculate the probability of how many events or less could happen for a given time or timeframe
+def get_poisson_greater_than(events, average):
+    return 1 - poisson.cdf(events, average)
+
+# average = How many events on average are expected to happen for a given time or timeframe
+# events_a, events_b = Calculate the probability of how many events_a to events_b could happen for a given time or timeframe
+def get_poisson_range(events_a, events_b, average):
+    if events_a >= events_a:
+        raise ValueError("x_point_a can not be larger or equal than x_point_b")
+    return poisson.cdf(events_b, average) - poisson.cdf(events_a, average)
+
+# mean = How many events on average are expected to happen for a given time or timeframe
+# sample_size = Number of total events happened in a given time or timeframe
+def generate_random_poisson_distribution(mean, sample_size):
+    return poisson.rvs(mean, size = sample_size)
 
 # generate_random_numbers_based_on_normal_distribution
 def generate_random_normal_distribution(numbers, mean, std_dev):
