@@ -263,6 +263,10 @@ def generate_random_normal_distribution(numbers, mean, std_dev):
         distribution.append(random_value)
     return distribution
 
+# Returns a random sample of size sample_size from the population
+def create_random_sample_from_population(population, sample_size):
+    return np.random.choice(np.array(population), sample_size, replace = False)
+
 # Convert an x_point to a z-score. Take an x-value and scale it in terms of standard deviation
 def get_z_score(x_point, mean, std_dev):
     return (x_point - mean) / std_dev
@@ -274,6 +278,14 @@ def z_score_to_x(z_score, mean, std_dev):
 def standard_normal_distribution():
     return norm(loc=0.0, scale=1.0)
 
+# n = number of trials
+# Expectation
+def get_expected_value_binomial(n, probability):
+    return n * probability
+
+def get_variance_binomial(n, probability):
+    return n * probability * (1 - probability)
+
 # level of confidence is a probability
 def critical_z_value(level_of_confidence: float):
     if level_of_confidence <= 0.0 or level_of_confidence >= 1.0:
@@ -283,10 +295,18 @@ def critical_z_value(level_of_confidence: float):
     upper_area = 1.0 - ((1.0 - level_of_confidence) / 2.0)
     return [norm_dist.ppf(left_tail_area), norm_dist.ppf(upper_area)]
 
+# standard error of the estimate of the mean
+# As sample size increases, the standard error will decrease.
+# As the population standard deviation increases, so will the standard error.
+# The standard error estimates the variability across multiple samples of a population.
+# The standard deviation describes variability within a single sample.
+def get_standard_error_mean(sample_size, std_dev_sample):
+    return std_dev_sample / math.sqrt(sample_size)
+
 def get_margin_of_error(critical_z, sample_size, std_dev_sample):
     if sample_size < 31:
         raise ValueError("sample_size must be greater than 31")
-    return critical_z * (std_dev_sample / math.sqrt(sample_size))
+    return critical_z * get_standard_error_mean(sample_size, std_dev_sample)
 
 # confidence interval is a range calculation showing
 # how confidently a sample mean falls in a range for the population mean.
@@ -294,6 +314,11 @@ def get_confidence_interval(level_of_confidence: float, sample_size: int, mean_s
     critical_z = critical_z_value(level_of_confidence)
     margin_of_error = get_margin_of_error(critical_z, sample_size, std_dev_sample)
     return [mean_sample - margin_of_error, mean_sample + margin_of_error]
+
+# Get which value range lies in 95% of the sample
+# Between 2.5 and 97.5 percent of the sample
+def get_95_percentile(sample):
+    return np.percentile(sample, [2.5, 97.5])
 
 # For 95% confidence level
 # Used for sample sizes smaller than 31

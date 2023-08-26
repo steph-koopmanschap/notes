@@ -450,7 +450,6 @@ expected = np.round(expected)
 Generate random numbers
 `np.random.choice(range(x_start, x_end), size=n, replace=True)`
 
-
 ### Data visualization
 
 Convert a column of datetime objects in a dataframe to numerical value for plotting.
