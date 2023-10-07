@@ -453,7 +453,7 @@ Generate random numbers
 ### Data visualization
 
 Convert a column of datetime objects in a dataframe to numerical value for plotting.
-`df["Date"] = df["Date"].apply(mdates.date2num)`  
+`df["Date"] = df["Date"].apply(mdates.date2num)`
 
 Create a boxplot from a column in a dataframe
 ```python
