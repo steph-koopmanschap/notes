@@ -255,12 +255,12 @@ php -v
 #List all the loaded PHP modules
 php --modules
 
-#Check if existing SSH keys are present.
+#List all existing SSH keys
 ls -al ~/.ssh
 
 #Generate a new SSH Key. Use the 2nd command if ed25519 is not supported.
-ssh-keygen -t ed25519 -C "youremail@example.com"
-ssh-keygen -t rsa -b 4096 -C "youremail@example.com"
+ssh-keygen -t ed25519 -C "youremail@example.com" -f "file_name"
+ssh-keygen -t rsa -b 4096 -C "youremail@example.com" -f "file_name"
 
 #Start the SSH-Agent in the background
 eval "$(ssh-agent -s)"

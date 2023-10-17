@@ -6,6 +6,7 @@
 import re 
 import math
 import random
+from datetime import datetime
 from collections import defaultdict
 import numpy as np
 import pandas as pd
@@ -13,9 +14,26 @@ import matplotlib.pyplot as plt
 from sympy import *
 from scipy.stats import binom, beta, norm, t, poisson
 from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import LabelEncoder
 
 # Declare 'x' and 'y' to SymPy
 x,y = symbols('x', 'y')
+
+# Convert a date column in a pandas dataframe to unix time
+def convert_to_unix_time(df, column_name, date_format):
+    df[column_name] = pd.to_datetime(df[column_name], format=date_format)
+    df[column_name] = df[column_name].apply(lambda x: int(x.timestamp()))
+    
+# Move a column_name to be the last column in the dataframe
+def move_column_to_last(df, column_name):
+    # 1. Get the list of column names
+    columns = df.columns.tolist()
+    # 2. Remove the column
+    columns.remove(column_name)
+    # 3. Append the removed column name back to the list
+    columns.append(column_name)
+    # 4. Reorder the DataFrame
+    df = df[columns]
 
 # Count the number of missing values (NA/null) values for a dataframe column
 def missing_count_in_column(x):
@@ -393,3 +411,9 @@ def plot_linear_regression(data, m, b):
     plt.plot(X, Y, 'o') # scatterplot
     plt.plot(X, m*X+b) # line
     plt.show()
+    
+def encode_categorical_values_to_numbers(df, column_name):
+    # Create a label encoder
+    label_encoder = LabelEncoder()
+    # Fit and transform the column to label-encoded values
+    df[column_name] = label_encoder.fit_transform(df[column_name])
