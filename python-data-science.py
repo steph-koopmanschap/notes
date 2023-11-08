@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sympy import *
-from scipy.stats import binom, beta, norm, t, poisson
+from scipy.stats import binom, beta, norm, t, poisson, ttest_1samp
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import LabelEncoder
 
@@ -88,6 +88,31 @@ def get_integral(f, point_xa, point_xb):
     area = integrate(f, (x, point_xa, point_xb))
     return area
 
+# Flip fair coin n times
+def flip_coin(n):
+    if n <= 40:
+        raise ValueError("n should be larger than 40")
+    # outcomes can be visualized as a distribution in a histogram
+    outcomes = []
+    outcomes_prob = []
+    probabilities = np.array([0.5, 0.5])
+    # Normalize the probabilities so they sum to 1, because of precision rounding errors in computer calculations
+    probabilities /= probabilities.sum()
+    for i in range(10000):
+        flips = np.random.choice(['heads', 'tails'], size=n, p=probabilities)
+        num_heads = np.sum(flips == 'heads')
+        num_heads_prob = (num_heads / n)
+        outcomes.append(num_heads)
+        outcomes_prob.append(num_heads_prob)
+    confidence_95 = np.percentile(outcomes, [2.5,97.5])
+    confidence_95_prob = np.percentile(outcomes_prob, [2.5,97.5])
+    return {
+        "distribution": outcomes,
+        "confidence_95": confidence_95,
+        "distribution_prob": outcomes_prob,
+        "confidence_95_prob": confidence_95_prob
+    }
+
 # Calculate the odds from a probabilty
 def get_odds(probability):
     probability = float(probability)
@@ -118,7 +143,7 @@ def get_untion_probability_mutual(p1, p2):
 def get_untion_probability_non_mutual(p1, p2):
     return p1 + p2 - (get_joint_probability(p1, p2))
 
-# Creates a binomial distrubution using the probability mass function
+# Creates a binomial distribution using the probability mass function
 def get_binomial_distribution(probability, trials):
     distribution = []
     for k in range(trials + 1):
@@ -368,7 +393,13 @@ def get_p_value(mean, std_dev):
                 "both_tails": p1 + p2
             }
         }
-
+    
+# Perform a 1 sample T-Test using scipy
+# Returns the t-stat and p-value
+def onesamp_ttest(distribution, expected_mean):
+    tstat, pval = ttest_1samp(distribution, expected_mean)
+    return [tstat, pval]
+    
 # Get the m and b values for a linear regression using sklearn
 def get_m_b_linear_regression(data):
     # Extract input variables (all rows, all columns but last column)
