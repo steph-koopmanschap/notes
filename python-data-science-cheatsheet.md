@@ -172,13 +172,13 @@ Open HTML file <br/>
 
 ### Save DataFames as files
 
-Open CSV file <br/>
-`df.to_csv('fileName.csv')` <br/>
-Open excel file <br/>
+Save to CSV file. Use index=False to save without an index column <br/>
+`df.to_csv('fileName.csv', index=False)` <br/>
+Save to excel file <br/>
 `df.to_excel('fileName.xlsx')` <br/>
-Open JSON file <br/>
+Save to JSON file <br/>
 `df.to_json('fileName.json')` <br/>
-Open HTML file <br/>
+Save to HTML file <br/>
 `df.to_html('fileName.html')` 
 
 ### Basic DataFrame functions
@@ -206,7 +206,7 @@ Returns a tuple with the first showing number of rows and the second showing num
 Get the number of elements in a column. <br/>
 `column_size = len(df.column_name)`
 
-Fill values in a column that are NaN or None with a different value <br/>
+Fill or replace values in a column that are NaN or None with a different value <br/>
 `df['column_name'].fillna(x, inplace = True)` <br/>
 Where x is a value. Note that the value should be the same datatype as the other values in the column.
 
@@ -266,7 +266,8 @@ Group by multiple columns. <br/>
 
 ### Change column name of dataframe:
 
-`df = df.rename(columns={"old_column_name": "new_column_name"})`
+`df = df.rename(columns={"old_column_name": "new_column_name"})` <br/>
+`df.rename(columns=renamed_columns, inplace=True)` 
 
 ### Add new column to dataframe
 
@@ -390,7 +391,8 @@ new_df = pd.merge(
 ```
 
 Merge 2 tables with outer join. (Includes mismatching rows.) Missing data will be NaN or None. <br/>
-`new_df = pd.merge(df1, df2, how='outer')`
+`new_df = pd.merge(df1, df2, how='outer')` <br/>
+`new_df = pd.merge(df1, df2, left_on="left_column", right_on="right_column", how='outer')`
 
 Merge 2 tables with left join. (Includes all rows from df1, and only rows from df2 that match with df1) <br/>
 `pd.merge(df1, df2, how='left')`
