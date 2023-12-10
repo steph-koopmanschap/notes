@@ -60,7 +60,7 @@ batch_size = 16
 n_batches = int(len(scaled_x_train) / batch_size)
 for i in range(epochs):
 	for current_batch in range(n_batches):
-	    # Create the batch
+		# Create the batch
 		start = current_batch * batch_size
 		end = (current_batch * batch_size) + batch_size
 		x_train_batch = scaled_x_train[start:end]
@@ -105,9 +105,7 @@ all_losses = (all_errors ** 2).mean(axis=0)
 # ---------------------------
 
 # Plotting
-
 plt.grid(True)
-
 # Plot the dataset
 plt.scatter(scaled_x_train, y_train)
 plt.scatter(scaled_x_val, y_val)

@@ -111,6 +111,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt 
 import seaborn as sns 
+import plotly.express as px
 import scipy
 ```
 
@@ -162,7 +163,7 @@ df = pd.DataFrame(data, columns = ['column1_label', 'column2_label'])
 ### Open Files as DataFrame
 
 Open CSV file <br/>
-`df = pd.read_csv('fileName.csv')` <br/>
+`df = pd.read_csv('fileName.csv', sep=',')` <br/>
 Open excel file <br/>
 `df = pd.read_excel('fileName.xlsx')` <br/>
 Open JSON file <br/>
@@ -173,7 +174,7 @@ Open HTML file <br/>
 ### Save DataFames as files
 
 Save to CSV file. Use index=False to save without an index column <br/>
-`df.to_csv('fileName.csv', index=False)` <br/>
+`df.to_csv('fileName.csv', index=False, encoding='utf-8-sig', sep=',')` <br/>
 Save to excel file <br/>
 `df.to_excel('fileName.xlsx')` <br/>
 Save to JSON file <br/>
@@ -223,6 +224,12 @@ Create a listing of how many times each value in a column appears. Ordered from 
 `counted_values = df['column_name'].value_counts()` <br/>
 or add normalize=True to get the percentages of how many each value appears in the column. <br/>
 `counted_values_proportion = df['column_name'].value_counts(normalize=True)`
+
+Count the number of missing or NA values per column. <br/>
+`df.isna().sum()`
+
+Strip prefixes from a string column <br/>
+df['column_name'] = df['column_name'].str.lstrip('prefix_text') 
 
 Create a table which includes both the counted values of a column and its frequency in percentage. 
 ```python
@@ -305,14 +312,16 @@ Replace conditional_operator with >, <, ==, !=, etc.
 Remove duplicate rows based on the "column_name" column <br/>
 `new_df = df.drop_duplicates(subset='column_name')` <br/>
 
-Delete a column called 'column_name'
+Delete a column called 'column_name' <br/>
 `df = df.drop('column_name', axis=1)`
 
-Copy a dataframe
+Copy a dataframe <br/>
 `df_new = df_old.copy()` <br/>
 Deep copy a dataframe (nested objects such a lists, dicts, or dataframes inside the dataframe) <br/>
-`import copy` <br/>
-`df_new = copy.deepcopy(df_old)`
+```python
+import copy` <br/>
+df_new = copy.deepcopy(df_old)
+```
 
 ### Create pivot table
 
@@ -458,66 +467,113 @@ from scipy.stats import chi2_contingency
 chi2, pval, dof, expected = chi2_contingency(contingency_table_frequencies)
 expected = np.round(expected)
 ```
-Generate random numbers
+Generate random numbers. <br/>
 `np.random.choice(range(x_start, x_end), size=n, replace=True)`
 
 ### Data visualization
 
-Convert a column of datetime objects in a dataframe to numerical value for plotting.
+Convert a column of datetime objects in a dataframe to numerical value for plotting.<br/>
 `df["Date"] = df["Date"].apply(mdates.date2num)`
 
-Create a boxplot from a column in a dataframe
+Create a line chart with a shaded error margin. Alpha sets the transparancy of the shade
 ```python
-sns.boxplot(x='column_name', data=df)
-plt.show()
-plt.close()
+plt.fill_between(x_values, y_lower, y_upper, alpha=0.2)
+plt.plot(months, revenue)
+```
+Create a pie chart to visualize between categories.
+```python
+plt.pie(category_data, labels=category_labels, autopct='%0.1f%%')
+plt.axis('equal')
+plt.legend(category_labels)
 ```
 
-Create a side by side boxplot from a column vs another column in a dataframe. <br/>
+Create a boxplot from a column in a dataframe <br/>
+`sns.boxplot(x='column_name', data=df)`
+
+Create a side by side boxplot from a column vs another column in a dataframe. (2 variables) <br/>
 x is usually a category while y is a numerical data. <br/>
-boxplots that overlap show a weak association between the values and the categories.
-```python
-sns.boxplot(data = df, x = 'column_one', y = 'column_two')
-sns.boxplot(x='column_name', data=df)
-plt.show()
-plt.close()
-```
+boxplots that overlap show a weak association between the values and the categories. <br/>
+`sns.boxplot(x='column_one', y='column_two', palette="pastel", data=df)`
 
-Create a histogram from a column in a dataframe
-```python
-sns.histplot(x='column_name', data=df)
-plt.show()
-plt.close()
-```
+Create a side by side boxplot where the color of the boxplots are the 3rd variable.<br/>
+`sns.boxplot(x='column_one', y='column_two', hue="column_three", palette="pastel", data=df)`
+
+Create a histogram from a column in a dataframe. <br/>
+`sns.histplot(x='column_name', data=df)`
 
 Create two histograms on top of each other from two series. <br/>
 Alpha sets the transparency for each histogram.
+We can normalize our histograms using density=True.
 ```python
 plt.hist(series_one , color="blue", label="series one", density=True, alpha=0.5)
 plt.hist(series_two , color="red", label="series two", density=True, alpha=0.5)
-plt.legend()
-plt.show()
-plt.close()
+plt.legend(["series_one", "series_two"])
 ```
 
-Create a bar chart from a column in a dataframe. The barchart visualises the counts of each value in the column.
+Create a 'empty' histogram that only has an outline but no fill.<br/>
+`plt.hist(data, histtype='step')`
+
+Create a bar chart with error bars. If yerr is a number then the error is the same for all bars.<br/>
+If yerr is an array the error is different for each bar according to the array index.<br/>
+`plt.bar(categories, y, yerr=error, capsize=5)` 
+
+Create a stacked bar chart, where each stack is a proportion of the total.
 ```python
-sns.countplot(x='column_name', data=df)
-plt.show()
-plt.close()
+unit_topics = ['A', 'B', 'C', 'D', 'E']
+As = [1, 2, 3, 4, 5]
+Bs = [6, 7, 8, 9, 10]
+Cs = [11, 12, 13, 14, 15]
+Ds = [10, 9, 8, 7, 6]
+Fs = [5, 4, 3, 2, 1]
+# Create an array of indices for each topic
+indices = np.arange(len(unit_topics))
+# Plot the bars
+p1 = plt.bar(indices, As, label='As')
+p2 = plt.bar(indices, Bs, bottom=As, label='Bs')
+p3 = plt.bar(indices, Cs, bottom=np.array(As) + np.array(Bs), label='Cs')
+p4 = plt.bar(indices, Ds, bottom=np.array(As) + np.array(Bs) + np.array(Cs), label='Ds')
+p5 = plt.bar(indices, Fs, bottom=np.array(As) + np.array(Bs) + np.array(Cs) + np.array(Ds), label='Fs')
+plt.xticks(indices, unit_topics)
+plt.legend(unit_topics)
 ```
 
-Create a bar chart from a column in a dataframe. The piechart visualises the counts of each value in the column.
+Create a bar chart with Seaborn <br/>
+`sns.barplot(graph_labels, graph_counts)`
+
+Create a bar chart from a column in a dataframe. The barchart visualises the counts of each value in the column.<br/>
+If `order` is added as a parameter it will sort the barcharts.<br/>
+```python
+# Use this order for ordering the bars in ascending or descending order. (For nominal data)
+order=df["column_name"].value_counts(ascending=True).index
+# Use this order for ordering the bars in categorigal order (For ordinal data)
+order=["First_value", "Second_value", "Third_value", "Fourth_value"]
+sns.countplot(x='column_name', data=df, order=order)
+```
+
+Create a bar chart from a column in a dataframe. The piechart visualises the counts of each value in the column.<br/>
 ```python
 df.column_name.value_counts().plot.pie()
-plt.show()
-plt.close()
 ```
 
-Create a scatter plot to see a relationship between two columns. The values in both columns are usually continuous and non-categorical.
+Create a scatter plot to see a relationship between two columns. The values in both columns are usually continuous and non-categorical.<br/>
 ```python
-plt.scatter(x = df.column_one, y = df.column_two)
+plt.scatter(x=df.column_one, y=df.column_two)
 plt.xlabel('column one')
 plt.ylabel('column two')
-plt.show()
 ```
+
+Create a scatter plot with Seaborn for 2 variables. Alpha sets the transparancy of the dots of the datapoints.<br/>
+`sns.scatterplot(x, y, alpha=1)`
+
+Create a scatter plot with Seaborn for 3 variables.<br/>
+`sns.scatterplot(x, y, hue=z, palette='bright', data=df, alpha=1)`
+
+Create a heatmap. <br/>
+`sns.heatmap(2dArray, cmap='warmcool')`
+
+Create a 3D scatter plot using plotly to show 3 or 4 variables. <br/>
+```python
+fig = px.scatter_3d(df, x='column_1', y='column_2', z='column_3', color='column_4')
+fig.show()
+```
+
