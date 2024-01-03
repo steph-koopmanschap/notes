@@ -233,6 +233,11 @@ def get_variance_sample(values):
 def get_standard_deviation_sample(values):
     return math.sqrt(get_variance_sample(values))
 
+# Returns how many standard deviations a datapoint is from the mean.
+def get_number_of_standard_deviations(datapoint, mean, std):
+    difference = datapoint - mean
+    return difference / std
+
 # quantifies how spread out a distribution is
 def get_coefficient_of_variation(mean, std_dev):
     return std_dev / mean

@@ -107,6 +107,76 @@ SELECT * FROM table_name LIMIT 10;
 ALTER TABLE table_name 
 DROP COLUMN column_name;
 
+#psql: Search for column in the DB in a schema.
+SELECT table_name, column_name
+FROM information_schema.columns
+WHERE table_schema = 'public'
+AND table_name LIKE '%table_name%'
+AND column_name LIKE '%column_name%'
+ORDER BY
+table_name,
+column_name;
+
+#psql: List all columns in a table, including data type of the column
+SELECT column_name, data_type
+FROM information_schema.columns
+WHERE table_schema = 'public' AND table_name = 'table_name'
+ORDER BY
+column_name;
+
+#psql: List a all columns of a table including primary and foreign keys
+SELECT
+    table_name,
+    column_name,
+    data_type,
+    CASE
+        WHEN column_name IN (
+            SELECT column_name
+            FROM information_schema.table_constraints tc
+            JOIN information_schema.constraint_column_usage AS ccu USING (constraint_name)
+            WHERE constraint_type = 'PRIMARY KEY' AND tc.table_schema = 'public' AND tc.table_name = 'table_name'
+        ) THEN 'PRIMARY KEY'
+        WHEN column_name IN (
+            SELECT column_name
+            FROM information_schema.table_constraints tc
+            JOIN information_schema.constraint_column_usage AS ccu USING (constraint_name)
+            WHERE constraint_type = 'FOREIGN KEY' AND tc.table_schema = 'public' AND tc.table_name = 'table_name'
+        ) THEN 'FOREIGN KEY'
+        ELSE ''
+    END AS key_type
+FROM information_schema.columns
+WHERE table_schema = 'public' AND table_name = 'table_name'
+ORDER BY
+key_type DESC,
+column_name;
+
+#psql: List all columns of all tables, including data types and keys
+SELECT
+    table_name,
+    column_name,
+    data_type,
+    CASE
+        WHEN column_name IN (
+            SELECT column_name
+            FROM information_schema.table_constraints tc
+            JOIN information_schema.constraint_column_usage AS ccu USING (constraint_name)
+            WHERE constraint_type = 'PRIMARY KEY' AND tc.table_schema = 'public'
+        ) THEN 'PRIMARY KEY'
+        WHEN column_name IN (
+            SELECT column_name
+            FROM information_schema.table_constraints tc
+            JOIN information_schema.constraint_column_usage AS ccu USING (constraint_name)
+            WHERE constraint_type = 'FOREIGN KEY' AND tc.table_schema = 'public'
+        ) THEN 'FOREIGN KEY'
+        ELSE ''
+    END AS key_type
+FROM information_schema.columns
+WHERE table_schema = 'public'
+ORDER by 
+table_name,
+key_type desc,
+column_name
+
 #sql: Join 3 tables together with aliases
 SELECT table_one.column_one AS alias_one, table_two.column_two AS alias_two, table_three.column_three AS alias_three
 FROM table_one
@@ -120,6 +190,20 @@ ON table_two.primary_key = table_three.foreign_key;
 UPDATE <table_name>
 SET <column_name> = <value>
 WHERE <column_name_clause> = <value>;
+
+#sql: Get all rows from table_a where those rows do not exist in table_b
+SELECT * 
+FROM table_a
+LEFT JOIN table_b
+ON table_a.id = table_b.id
+WHERE table_b.id IS NULL;
+
+#sql: Get all rows from table_b where those rows do not exist in table_a
+SELECT * 
+FROM table_a
+RIGHT JOIN table_b
+ON table_a.id = table_b.id
+WHERE table_a.id IS NULL;
 
 #psql: Delete data from a column wich satisfies the conditional.
 DELETE FROM <column_name> 
@@ -306,6 +390,33 @@ CREATE USER 'username'@'host' IDENTIFIED WITH mysql_native_password BY 'password
 #Replace authentication_plugin with auth_socket but this prevents remote login
 CREATE USER 'username'@'host' IDENTIFIED WITH authentication_plugin BY 'password';
 
+#mysql: Show info from all columns from a table
+SHOW FULL COLUMNS FROM table_name;
+
+#mysql: Show info of a specific column from a table
+SHOW FULL COLUMNS FROM your_table_name WHERE Field = 'column_name';
+
+#mysql: Show all indexes on a table
+SHOW INDEX FROM table_name;
+
+#mysql: Show constrains on a table
+SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE, TABLE_NAME
+FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+WHERE TABLE_NAME = 'table_name';
+
+#mysql: Show foreign keys linked to this column
+SELECT
+  TABLE_NAME,
+  COLUMN_NAME,
+  CONSTRAINT_NAME,
+  REFERENCED_TABLE_NAME,
+  REFERENCED_COLUMN_NAME
+FROM
+  INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE
+  REFERENCED_TABLE_NAME = 'table_name'
+  AND REFERENCED_COLUMN_NAME = 'column_name';
+
 #mysql: Give full priviledges on database to specified user on localhost
 GRANT ALL PRIVILEGES ON database_name.* TO username@localhost
 
@@ -330,3 +441,8 @@ WHERE
 #sqlite3: Execute an SQL script called file_name
 .read file_name.sql
 
+#mysql: drop all foreign keys in a database (Note: this generates a table with SQL statements which you can copy and then execute).
+SELECT concat('alter table `',table_schema,'`.`',table_name,'` DROP FOREIGN KEY ',constraint_name,';')
+FROM information_schema.table_constraints
+WHERE constraint_type='FOREIGN KEY'
+AND table_schema='database_name';

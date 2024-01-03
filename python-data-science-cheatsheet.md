@@ -229,7 +229,7 @@ Count the number of missing or NA values per column. <br/>
 `df.isna().sum()`
 
 Strip prefixes from a string column <br/>
-df['column_name'] = df['column_name'].str.lstrip('prefix_text') 
+`df['column_name'] = df['column_name'].str.lstrip('prefix_text')`
 
 Create a table which includes both the counted values of a column and its frequency in percentage. 
 ```python
@@ -315,6 +315,12 @@ Remove duplicate rows based on the "column_name" column <br/>
 Delete a column called 'column_name' <br/>
 `df = df.drop('column_name', axis=1)`
 
+Remove all Null, missing or NA rows from a dataframe. <br/>
+`df.dropna(how='all', inplace=True)`
+
+Remove all Null, missing or NA columns from a dataframe. <br/>
+`df.dropna(axis='columns', inplace=True)`
+
 Copy a dataframe <br/>
 `df_new = df_old.copy()` <br/>
 Deep copy a dataframe (nested objects such a lists, dicts, or dataframes inside the dataframe) <br/>
@@ -322,6 +328,23 @@ Deep copy a dataframe (nested objects such a lists, dicts, or dataframes inside 
 import copy` <br/>
 df_new = copy.deepcopy(df_old)
 ```
+
+Loop over the columns of a dataframe
+```python
+for column in df.columns:
+   print(column)
+```
+
+Seperate each column of a dataframe into a new dataframe <br/>
+`column_dfs = [df.iloc[:, i:i+1] for i in range(df.shape[1])]` <br/>
+Loop over a list of dataframes <br/>
+```python
+for i, column_df in enumerate(column_dfs):
+   print(f"DataFrame for column {i+1}:\n{column_df}\n")
+```
+
+Select the first column of a dataframe if you do not know the column name. <br/>
+`first_column = df[df.columns[0]]`
 
 ### Create pivot table
 
@@ -502,7 +525,7 @@ Create a histogram from a column in a dataframe. <br/>
 `sns.histplot(x='column_name', data=df)`
 
 Create two histograms on top of each other from two series. <br/>
-Alpha sets the transparency for each histogram.
+Alpha sets the transparency for each histogram.<br/>
 We can normalize our histograms using density=True.
 ```python
 plt.hist(series_one , color="blue", label="series one", density=True, alpha=0.5)
@@ -512,6 +535,9 @@ plt.legend(["series_one", "series_two"])
 
 Create a 'empty' histogram that only has an outline but no fill.<br/>
 `plt.hist(data, histtype='step')`
+
+Set the range and bins of the histogram <br/>
+`plt.hist(series, range=(min, max), bins=100, edgecolor="black"`
 
 Create a bar chart with error bars. If yerr is a number then the error is the same for all bars.<br/>
 If yerr is an array the error is different for each bar according to the array index.<br/>
@@ -538,7 +564,7 @@ plt.legend(unit_topics)
 ```
 
 Create a bar chart with Seaborn <br/>
-`sns.barplot(graph_labels, graph_counts)`
+`sns.barplot(df, x="labels_column", y="values_column")`
 
 Create a bar chart from a column in a dataframe. The barchart visualises the counts of each value in the column.<br/>
 If `order` is added as a parameter it will sort the barcharts.<br/>
