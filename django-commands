@@ -68,5 +68,8 @@ python manage.py show_urls
 # Generate a graph of the models and their relationships. (This command can only be used in the django-extensions package)
 python manage.py graph_models -a -o myapp_models.png
 
+# Install the tailwind dependencies in Django  (This command can only be used in the django-tailwind package)
+python manage.py tailwind install
+
 # Start the tailwind watcher/builder. (This command can only be used in the django-tailwind package)
 python manage.py tailwind start
