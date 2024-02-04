@@ -205,6 +205,36 @@ RIGHT JOIN table_b
 ON table_a.id = table_b.id
 WHERE table_a.id IS NULL;
 
+#sql: Get the difference or value change of 1 day
+SELECT
+   category_column,
+   date_column,
+   value_column,
+   value_column - LAG(value_column, 1, value_column) OVER ( 
+      ORDER BY date_column 
+   ) AS value_change
+FROM
+   table 
+ORDER BY 
+category_column,
+date_column
+
+#sql: Get the date portion of a datetime
+SELECT DATE('2024-09-01 17:38:22');
+
+#sql: Get the time portion of a datetime
+SELECT TIME('2024-09-01 17:38:22');
+
+#sql: add or subtract time from a datetime
+# Modifieres to use
+# '+-N years'
+# '+-N months'
+# '+-N days'
+# '+-N hours'
+# '+-N minutes'
+# '+-N seconds'
+SELECT DATETIME('2024-02-10', '-1 day', '+7 hours');
+
 #psql: Delete data from a column wich satisfies the conditional.
 DELETE FROM <column_name> 
 WHERE <conditional>;
@@ -446,3 +476,29 @@ SELECT concat('alter table `',table_schema,'`.`',table_name,'` DROP FOREIGN KEY 
 FROM information_schema.table_constraints
 WHERE constraint_type='FOREIGN KEY'
 AND table_schema='database_name';
+
+#mysql: Show all tables being used in a process
+SHOW OPEN tables WHERE in_use>0;
+
+#mysql: Show are current list of proccesses
+SHOW processlist;
+
+#mysql: Kill a process
+KILL <procces_id>;
+
+#mysql: Get the size of the database in MB
+SELECT 
+    table_schema "Database", 
+    SUM(data_length + index_length) / (1024 * 1024) "Size (MB)"
+FROM information_schema.tables 
+GROUP BY table_schema;
+
+#mysql: Show how many max connections the mysql db can handle before giving a "Too many connections" error.
+SHOW variables LIKE "max_connections";
+
+#mysql: Show all current connections to the DB
+SELECT ID, USER, HOST, DB, COMMAND, TIME, STATE, INFO
+FROM information_schema.PROCESSLIST;
+
+
+

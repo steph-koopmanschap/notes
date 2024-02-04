@@ -510,6 +510,10 @@ plt.axis('equal')
 plt.legend(category_labels)
 ```
 
+Create a boxplot from a column in a dataframe using matplotlib
+`plt.boxplot([dataset_one, dataset_two])`
+
+
 Create a boxplot from a column in a dataframe <br/>
 `sns.boxplot(x='column_name', data=df)`
 
