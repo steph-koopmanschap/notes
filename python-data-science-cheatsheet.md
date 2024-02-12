@@ -220,6 +220,12 @@ Convert a column of dates to datetime objects. The format option is optional and
 Cast a column to a category with an order <br/>
 `df['column_name'] = pd.Categorical(df['column_name'], ['value1', 'value2', 'value3'], ordered=True)`
 
+Find the median of ordinal categorial variable. This only works if column_name is cast to a category with order. <br/>
+```python
+median_index = np.median(df['column_name'].cat.codes)
+median_category = correct_order[int(median_index)]
+```
+
 Create a listing of how many times each value in a column appears. Ordered from high to low. (Returns a series) <br/>
 `counted_values = df['column_name'].value_counts()` <br/>
 or add normalize=True to get the percentages of how many each value appears in the column. <br/>
