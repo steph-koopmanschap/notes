@@ -145,7 +145,26 @@ Returns the mean of the array <br/>
 Returns the median of the array <br/>
 `a.median()` <br/>
 Returns the standard deviation of the array <br/>
-`a.std()`
+`a.std()` <br/>
+Create a matrix from vectors
+```python
+vector1 = np.array([-3,-7,3,4])
+vector2 = np.array([5,2,-4,9])
+vector3 = np.array([6,-8,10,1])
+matrix = np.column_stack((vector1, vector2, vector3))
+```
+Returns an identity matrix that is nxn in size. <br/>
+`identity = np.eye(n)` <br/>
+Returns a zero matrix that is nxm in size. <br/>
+`zero_matrix = np.zeros((n,m))` <br/>
+Returns the transpose matrix of matrix A. <br/>
+`A_transpose = A.T` <br/>
+Returns the magnitude of vector v <br/>
+`v_mag = np.linalg.norm(v)` <br/>
+Returns the inverse matrix of matrix A <br/>
+`np.linalg.inv(A)` <br/>
+Solve x,y,z for Ax=b where the matrix A contains the cofficients/constants and b contains right side.<br/>
+`x,y,z = np.linalg.solve(A,b)` <br/>
 
 ### Create a DataFrame
 
@@ -211,6 +230,12 @@ Fill or replace values in a column that are NaN or None with a different value <
 `df['column_name'].fillna(x, inplace = True)` <br/>
 Where x is a value. Note that the value should be the same datatype as the other values in the column.
 
+Forward fill replaces NaN or None values in a column with the previous row <br/>
+`df['column_name'].ffill(axis=0, inplace=True)` <br/>
+
+Backward fill replaces NaN or None values in a column with the next row <br/>
+`df['column_name'].bfill(axis=0, inplace=True)` <br/>
+
 Cast the datatypes in a column to a different datatype. <br/>
 `df['column_name'] = df['column_name'].astype('dataType')` <br/>
 
@@ -230,6 +255,12 @@ Create a listing of how many times each value in a column appears. Ordered from 
 `counted_values = df['column_name'].value_counts()` <br/>
 or add normalize=True to get the percentages of how many each value appears in the column. <br/>
 `counted_values_proportion = df['column_name'].value_counts(normalize=True)`
+
+Returns a grid in the form of 
+binary_variable continues_variable.mean()
+0 
+1
+`df.groupby('binary_variably').mean().continues_variable)`
 
 Count the number of missing or NA values per column. <br/>
 `df.isna().sum()`
@@ -315,6 +346,9 @@ Creates a new data frame with the values of column filtered based on the conditi
 `new_df = df[df['column_name'] conditional_operator value]` <br/>
 Replace conditional_operator with >, <, ==, !=, etc.
 
+Get a new dataframe with all duplicated rows listed.  <br/>
+`duplicated_rows = df[df.duplicated(keep=False)]`  <br/>
+
 Remove duplicate rows based on the "column_name" column <br/>
 `new_df = df.drop_duplicates(subset='column_name')` <br/>
 
@@ -322,10 +356,13 @@ Delete a column called 'column_name' <br/>
 `df = df.drop('column_name', axis=1)`
 
 Remove all Null, missing or NA rows from a dataframe. <br/>
-`df.dropna(how='all', inplace=True)`
+`df.dropna(how='all', inplace=True)` <br/>
+
+if the specified columns contains Remove Null, missing or NA rows, then remove those rows. Returns a new dataframe. <br/>
+`df = df.dropna(subset=['column_name_one', 'column_name_two], how='any')` <br/>
 
 Remove all Null, missing or NA columns from a dataframe. <br/>
-`df.dropna(axis='columns', inplace=True)`
+`df.dropna(axis='columns', inplace=True)` <br/>
 
 Copy a dataframe <br/>
 `df_new = df_old.copy()` <br/>
@@ -519,7 +556,6 @@ plt.legend(category_labels)
 Create a boxplot from a column in a dataframe using matplotlib
 `plt.boxplot([dataset_one, dataset_two])`
 
-
 Create a boxplot from a column in a dataframe <br/>
 `sns.boxplot(x='column_name', data=df)`
 
@@ -611,5 +647,12 @@ Create a 3D scatter plot using plotly to show 3 or 4 variables. <br/>
 ```python
 fig = px.scatter_3d(df, x='column_1', y='column_2', z='column_3', color='column_4')
 fig.show()
+```
+
+Display image using Matplotlib <br/>
+```python
+plt.imshow(image)
+plt.axis('off')  # Hide axes
+plt.show()
 ```
 

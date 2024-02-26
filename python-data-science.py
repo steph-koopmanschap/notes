@@ -6,6 +6,7 @@
 import re 
 import math
 import random
+import glob
 from datetime import datetime
 from collections import defaultdict
 import numpy as np
@@ -15,9 +16,24 @@ from sympy import *
 from scipy.stats import binom, beta, norm, t, poisson, ttest_1samp
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import LabelEncoder
+from sklearn.experimental import enable_iterative_imputer
+from sklearn.impute import IterativeImputer
+import imageio
 
 # Declare 'x' and 'y' to SymPy
 x,y = symbols('x', 'y')
+
+# Create a single dataframe from multiple files that have the same columns
+def concat_files_df(filename_regex: str)
+    files = glob.glob(f"{filename_regex}.csv")
+    df_list = []
+    for filename in files:
+      data = pd.read_csv(filename)
+      df_list.append(data)
+
+    df = pd.concat(df_list)
+    return df
+
 
 # Convert a date column in a pandas dataframe to unix time
 def convert_to_unix_time(df, column_name, date_format):
@@ -404,6 +420,14 @@ def get_p_value(mean, std_dev):
 def onesamp_ttest(distribution, expected_mean):
     tstat, pval = ttest_1samp(distribution, expected_mean)
     return [tstat, pval]
+
+# Calculate the minimum detectable effect
+# baseline and new_desired should be in percentage
+def get_min_detectable_effect(baseline: float, new_desired: float) -> float:
+    # min_detectable_effect is a percentage of the baseline 
+    min_detectable_effect = (new_desired - baseline) / baseline * 100
+    return min_detectable_effect
+
     
 # Get the m and b values for a linear regression using sklearn
 def get_m_b_linear_regression(data):
@@ -448,8 +472,31 @@ def plot_linear_regression(data, m, b):
     plt.plot(X, m*X+b) # line
     plt.show()
     
+def get_chi_contingency_p_value(data, column_name_a: str, column_name_b: str)
+    contingency = pd.crosstab(data[column_name_a], data[column_name_b])
+    chi2, pval, dof, expected = chi2_contingency(contingency)
+    return pval
+    
 def encode_categorical_values_to_numbers(df, column_name):
     # Create a label encoder
     label_encoder = LabelEncoder()
     # Fit and transform the column to label-encoded values
     df[column_name] = label_encoder.fit_transform(df[column_name])
+    
+# Use multiple imputation to fill missing, NA, NaN, or None values in a dataset.
+def fill_missing_MI(df, dfTest)
+    # Create the IterativeImputer model to predict missing values
+    imp = IterativeImputer(max_iter=10, random_state=0)
+    # Fit the model to the test dataset
+    imp.fit(dfTest)
+    # Transform the model on the entire dataset
+    dfComplete = pd.DataFrame(np.round(imp.transform(df),1), columns=df.columns)
+
+# Load an image as a numpy array
+def np_load_img(path):
+    return imageio.imread(path)
+    
+# Make img1 and img2 the same matrix size.
+def img_resize(img1, img2)
+    from skimage.transform import resize
+    return resize(img1, img2[:2], anti_aliasing=True)
